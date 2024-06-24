@@ -1,6 +1,6 @@
 import psycopg2 as ps
 import datetime
-from config import host, user, password, db_name
+from database.config import host, user, password, db_name
 
 
 # здесь пока берется время из datatime.now()
@@ -125,8 +125,7 @@ def get_trajectory(id_person):
         lines = get_blind_line(camera[0])
         if len(lines) != 0 and lines not in blind_lines:
             blind_lines.append(lines)
-    return  central_points, blind_lines
-
+    return central_points, blind_lines
 
 
 if __name__ == "__main__":
