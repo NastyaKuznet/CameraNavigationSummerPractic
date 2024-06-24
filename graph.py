@@ -2,7 +2,6 @@ from plotly import graph_objs as go
 import plotly.express as px
 import numpy as np
 
-#алгоритм сортировки точек в нужном порядке для границ или каждая стена отдельно
 
 # ввод координат левой нижней точки и правой верхней точки поля
 field = [[0, 0], [30, 20]]
@@ -44,7 +43,7 @@ fig.add_trace(go.Scatter(x=cameras[0], y=cameras[1], mode='markers',
     name='Camera', line=dict(color='blue')))
 # ввывод зон камер
 for selected_field in selected_fields:
-  fig.add_shape(type="rect",x0=selected_field[0][0], y0=selected_field[0][1],
+  fig.add_shape(type="rect", x0=selected_field[0][0], y0=selected_field[0][1],
     x1=selected_field[1][0], y1=selected_field[1][1], fillcolor="#eec896",
     line=dict(color="#e0993c", width=2), opacity=0.5)
 # ввывод траектории
