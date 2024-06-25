@@ -1,5 +1,5 @@
 from plotly import graph_objs as go
-from setting_location import field, walls, cameras, selected_fields
+from setting_location import field, walls, cameras, selected_fields, exits
 import database.db as db
 
 
@@ -22,6 +22,10 @@ def draw_location(fig):
         fig.add_shape(type="rect", x0=selected_field[0][0], y0=selected_field[0][1],
                       x1=selected_field[1][0], y1=selected_field[1][1], fillcolor="#eec896",
                       line=dict(color="#e0993c", width=2), opacity=0.5)
+    # ввод указания где вход/выход
+    for ex in exits:
+        fig.add_annotation(x=ex[0], y=ex[1], text=ex[2],
+                           showarrow=True, arrowhead=7, arrowsize=1, arrowcolor='black')
 
 
 def draw_trajectory(fig, id_person):
@@ -33,7 +37,7 @@ def draw_trajectory(fig, id_person):
     save = 0
     x = []
     y = []
-    while (True):
+    while True:
         if ind < len(bli) and cen[i][0] == bli[ind][4]:
             x.append(bli[ind][0])
             x.append(bli[ind][2])
@@ -50,7 +54,6 @@ def draw_trajectory(fig, id_person):
             i += 1
         if i == len(cen) - 1:
             break
-
     fig.add_trace(go.Scatter(x=x, y=y, mode='lines',
                              showlegend=True, line=dict(color='red', width=2)))
 
