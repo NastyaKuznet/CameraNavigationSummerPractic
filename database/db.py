@@ -3,52 +3,12 @@ import datetime
 from database.config import host, user, password, db_name
 
 
-# здесь пока берется время из datatime.now()
+# здесь пока берется время из datatime.now() Так что надо будет поменять!!
 
 
-def exec_query(query, info_message):
-    try:
-        connection = ps.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=db_name
-        )
-        connection.autocommit = True
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            print(info_message)
-            return cursor.fetchone()[0]
-    except Exception as _ex:
-        print("[INFO] Error while working with PostgreSQL", _ex)
-    finally:
-        if connection:
-            connection.close()
-            print("[INFO] PostgreSQL connection closed")
-
-
-def exec_query_all(query, info_message):
-    try:
-        connection = ps.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=db_name
-        )
-        connection.autocommit = True
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            print(info_message)
-            return cursor.fetchall()
-    except Exception as _ex:
-        print("[INFO] Error while working with PostgreSQL", _ex)
-    finally:
-        if connection:
-            connection.close()
-            print("[INFO] PostgreSQL connection closed")
-
-
-def exec_update(update, info_message):
+# метод запроса в целом. его можно юзать, когда надо сделть insert, update, delete
+# в обшем когда не нужно ничего возвращать
+def exec_query(update, info_message):
     try:
         connection = ps.connect(
             host=host,
@@ -60,6 +20,7 @@ def exec_update(update, info_message):
         with connection.cursor() as cursor:
             cursor.execute(update)
             print(info_message)
+        return cursor
     except Exception as _ex:
         print("[INFO] Error while working with PostgreSQL", _ex)
     finally:
@@ -68,41 +29,51 @@ def exec_update(update, info_message):
             print("[INFO] PostgreSQL connection closed")
 
 
+# здесь возвращаются все результаты запроса для select
+def exec_query_all(query, info_message):
+    return exec_query(query, info_message).fetchall()
+
+
+# здесь возвращается первый результат запроса для select
+def exec_query_first(query, info_message):
+    return exec_query(query, info_message).fetchone()[0]
+
+
 def add_person(link_photo):
-    exec_update(f"""insert into test.person (linkphoto, timeInput)
+    exec_query(f"""insert into test.person (linkphoto, timeInput)
                 values ('{link_photo}', '{datetime.datetime.now().isoformat()}')""",
-                "[INFO] Person was added")
+               "[INFO] Person was added")
 
 
 def add_camera(model, x_central, y_central):
-    exec_update(f"""insert into test.camera (model, x_central, y_central)
+    exec_query(f"""insert into test.camera (model, x_central, y_central)
                  values ('{model}', '{x_central}', '{y_central}')""",
-                "[INFO] Camera was added")
+               "[INFO] Camera was added")
 
 
 def add_photo(id_camera, id_person, link_photo):
-    exec_update(f"""insert into test.photo (idcamera, idperson, linkphoto, timephoto)
+    exec_query(f"""insert into test.photo (idcamera, idperson, linkphoto, timephoto)
                  values ('{id_camera}', '{id_person}', 
                  '{link_photo}', '{datetime.datetime.now().isoformat()}')""",
-                "[INFO] Photo was added")
+               "[INFO] Photo was added")
 
 
 def add_blind_line(x1, y1, x2, y2, id_camera1, id_camera2):
-    exec_update(f"""insert into test.blindline (x1, y1, x2, y2, idcamera1, idcamera2)
+    exec_query(f"""insert into test.blindline (x1, y1, x2, y2, idcamera1, idcamera2)
                  values ('{x1}', '{y1}', '{x2}', '{y2}', '{id_camera1}', '{id_camera2}')""",
-                "[INFO] Blind line was added")
+               "[INFO] Blind line was added")
 
 
 def get_id_camera(model):
-    return exec_query(f"""select id from test.camera as c 
+    return exec_query_first(f"""select id from test.camera as c 
                 where c.model = '{model}'""",
-                      "[INFO] Id camera was received")
+                            "[INFO] Id camera was received")
 
 
 def get_id_camera_from_photo_by_id_person(id_person):
     return exec_query_all(f"""select idcamera from test.photo as c
     where c.idperson = '{id_person}'""",
-                   "[INFO] Id cameras from photo by id person were received")
+                          "[INFO] Id cameras from photo by id person were received")
 
 
 def get_central_points(id_camera):
@@ -117,19 +88,10 @@ def get_blind_line(id_camera):
                           "[INFO] Blind line were received")
 
 
-def get_trajectory(id_person):
-    cameras = get_id_camera_from_photo_by_id_person(id_person)
-    central_points = [[camera[0], get_central_points(camera[0])[0]] for camera in cameras]
-    blind_lines = []
-    for camera in cameras:
-        lines = get_blind_line(camera[0])
-        if len(lines) != 0 and lines not in blind_lines:
-            blind_lines.append(lines)
-    return central_points, blind_lines
+
 
 
 if __name__ == "__main__":
-    #add_photo(4, 3, 'photo5')
-    #print(get_id_camera_from_photo_by_id_person(3))
-    #add_blind_line(15, 15, 25, 15, 3, 4)
-    print(get_trajectory(3))
+    pass
+    # add_photo(4, 3, 'photo5')
+
