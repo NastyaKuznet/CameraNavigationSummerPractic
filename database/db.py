@@ -110,7 +110,7 @@ def get_walls_in_location(id_location):
     return exec_query_first(f"""select w.coord_start, w.coord_end 
                                         from {schema_name}.wall w join {schema_name}.location l on w.id_location = l.id 
                                         where l.id = {id_location}""",
-                            "[INFO] Person's photo-vectors was received")
+                            "[INFO] Location walls was received")
 
 
 def get_locations_in_map(id_map):
@@ -141,7 +141,7 @@ def get_blind_line(id_camera):
                           "[INFO] Blind line were received")
 
 
-def get_camera_coords_by_id(id_person):
+def get_person_appearances(id_person):
     return exec_query_first(f"""select a.id, a.id_camera, a.data_time 
                                        from appearance a join person p on a.id_person = p.id 
                                        where p.id = {id_person}""",
