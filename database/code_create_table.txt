@@ -1,12 +1,12 @@
-CREATE TABLE "photo"(
-	"id" serial PRIMARY KEY,
-    "vector" integer[] NOT null UNIQUE
-);
-
 CREATE TABLE "person"(
 	"id" serial PRIMARY KEY,
-    "id_photo" integer NOT null references "photo" ("id"),
     "name" text not null default 'unidentified'
+);
+
+CREATE TABLE "photo"(
+	"id" serial PRIMARY KEY,
+    "vector" integer[] NOT null UNIQUE,
+    "id_person" integer not null references "person" ("id")
 );
 
 CREATE TABLE "users"(
