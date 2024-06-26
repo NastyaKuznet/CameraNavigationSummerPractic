@@ -1,5 +1,6 @@
-host = "127.0.0.1"
+host = "localhost"
 user = "postgres"
-password = "1234"
+password = "123456"
 db_name = "cam_nav"
+schema_name = "summer_practice"
 port = 5432

@@ -1,6 +1,6 @@
 import psycopg2 as ps
 import datetime
-from database.config import host, user, password, db_name
+from database.config import host, user, password, db_name, schema_name
 
 
 # здесь пока берется время из datatime.now() Так что надо будет поменять!!
@@ -39,29 +39,62 @@ def exec_query_first(query, info_message):
     return exec_query(query, info_message).fetchone()[0]
 
 
-def add_person(link_photo):
-    exec_query(f"""insert into test.person (linkphoto, timeInput)
-                values ('{link_photo}', '{datetime.datetime.now().isoformat()}')""",
-               "[INFO] Person was added")
+def add_user(name):
+    exec_query(f"""insert into {schema_name}.users (name)
+                          values ('{name}')""",
+               "[INFO] User was added")
 
 
-def add_camera(model, x_central, y_central):
-    exec_query(f"""insert into test.camera (model, x_central, y_central)
-                 values ('{model}', '{x_central}', '{y_central}')""",
+def add_map(id_user, name, address):
+    exec_query(f"""insert into {schema_name}.map (id_user, name, address)
+                          values ({id_user}, '{name}', '{address}')""",
+               "[INFO] Map was added")
+
+
+def add_location(name, coord: list, id_map, floor):
+    exec_query(f"""insert into {schema_name}.location (name, coord, id_map, floor)
+                          values ('{name}', point({coord[0]}, {coord[1]}), {id_map}, {floor})""",
+               "[INFO] Location was added")
+
+
+def add_wall(id_location, coord_start: list, coord_end: list):
+    exec_query(f"""insert into {schema_name}.wall (id_location, coord_start, coord_end)
+                          values ({id_location}, point({coord_start[0]}, {coord_start[1]}),
+                                                 point({coord_end[0]}, {coord_end[1]}))""",
+               "[INFO] Wall was added")
+
+
+def add_camera(id_location, coord: list, angle, width):
+    exec_query(f"""insert into {schema_name}.camera (id_location, coord, angle, width)
+                 values ({id_location}, point({coord[0]}, {coord[1]}), {angle}, {width})""",
                "[INFO] Camera was added")
 
 
-def add_photo(id_camera, id_person, link_photo):
-    exec_query(f"""insert into test.photo (idcamera, idperson, linkphoto, timephoto)
-                 values ('{id_camera}', '{id_person}', 
-                 '{link_photo}', '{datetime.datetime.now().isoformat()}')""",
+def add_blind_line(coord_start: list, coord_end: list, id_camera1, id_camera2):
+    exec_query(f"""insert into {schema_name}.blind_line (coord_start, coord_end, id_camera1, id_camera2)
+                 values (point({coord_start[0]}, {coord_start[1]}), point({coord_end[0]}, {coord_end[1]}),
+                        {id_camera1}, {id_camera2})""",
+               "[INFO] Blind line was added")
+
+
+def add_appearance(id_person, id_camera, data_time: datetime):
+    exec_query(f"""insert into {schema_name}.appearance (id_person, id_camera, data_time)
+                 values ({id_person}, {id_camera}, {ps.extensions.adapt(data_time)})""",
+               "[INFO] Appearance was added")
+
+
+def add_person(id_photo, name):
+    exec_query(f"""insert into {schema_name}.person (id_photo, name)
+                 values ({id_photo}, '{name}')""",
+               "[INFO] Person was added")
+
+
+def add_photo(vector: list):
+    exec_query(f"""insert into {schema_name}.photo (vector)
+                 values (Array[{vector}])""",
                "[INFO] Photo was added")
 
 
-def add_blind_line(x1, y1, x2, y2, id_camera1, id_camera2):
-    exec_query(f"""insert into test.blindline (x1, y1, x2, y2, idcamera1, idcamera2)
-                 values ('{x1}', '{y1}', '{x2}', '{y2}', '{id_camera1}', '{id_camera2}')""",
-               "[INFO] Blind line was added")
 
 
 def get_id_camera(model):
@@ -86,9 +119,6 @@ def get_blind_line(id_camera):
     return exec_query_all(f"""select * from test.blindline as bl
     where bl.idcamera1 = '{id_camera}' or bl.idcamera2 = '{id_camera}'""",
                           "[INFO] Blind line were received")
-
-
-
 
 
 if __name__ == "__main__":
