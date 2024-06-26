@@ -9,14 +9,14 @@ CREATE TABLE "person"(
     "name" text not null default 'unidentified'
 );
 
-CREATE TABLE "user"(
+CREATE TABLE "users"(
 	"id" serial PRIMARY KEY,
     "name" text NOT null
 );
 
 CREATE TABLE "map"(
 	"id" serial PRIMARY KEY,
-    "id_user" BIGINT NOT null references "user" ("id"),
+    "id_user" BIGINT NOT null references "users" ("id"),
     "name" TEXT NOT NULL,
     "address" TEXT NOT null
 );
