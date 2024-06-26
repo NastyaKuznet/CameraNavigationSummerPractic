@@ -8,7 +8,7 @@ from database.config import host, user, password, db_name, schema_name
 
 # метод запроса в целом. его можно юзать, когда надо сделть insert, update, delete
 # в обшем когда не нужно ничего возвращать
-def exec_query(update, info_message):
+def exec_query(update, info_message, query_type: bool):
     try:
         connection = ps.connect(
             host=host,
@@ -20,7 +20,11 @@ def exec_query(update, info_message):
         with connection.cursor() as cursor:
             cursor.execute(update)
             print(info_message)
-        return cursor
+            if query_type:
+                result = cursor.fetchall()
+            else:
+                result = cursor.fetchone()
+        return result
     except Exception as _ex:
         print("[INFO] Error while working with PostgreSQL", _ex)
     finally:
@@ -31,12 +35,12 @@ def exec_query(update, info_message):
 
 # здесь возвращаются все результаты запроса для select
 def exec_query_all(query, info_message):
-    return exec_query(query, info_message).fetchall()
+    return exec_query(query, info_message, 1)
 
 
 # здесь возвращается первый результат запроса для select
 def exec_query_first(query, info_message):
-    return exec_query(query, info_message).fetchone()[0]
+    return exec_query(query, info_message, 0)
 
 
 def add_user(name):
@@ -83,45 +87,67 @@ def add_appearance(id_person, id_camera, data_time: datetime):
                "[INFO] Appearance was added")
 
 
-def add_person(id_photo, name):
-    exec_query(f"""insert into {schema_name}.person (id_photo, name)
-                 values ({id_photo}, '{name}')""",
+def add_person(name):
+    exec_query(f"""insert into {schema_name}.person (name)
+                 values ('{name}')""",
                "[INFO] Person was added")
 
 
-def add_photo(vector: list):
-    exec_query(f"""insert into {schema_name}.photo (vector)
-                 values (Array[{vector}])""",
+def add_photo(vector: list, id_person):
+    exec_query(f"""insert into {schema_name}.photo (vector, id_person)
+                 values (Array[{vector}], {id_person})""",
                "[INFO] Photo was added")
 
 
+def get_person_photo_vectors(id_person):
+    return exec_query_first(f"""select p.vector
+                                    from {schema_name}.photo p join {schema_name}.person p2 on p.id = p2.id_photo
+                                    where p2.id = {id_person}""",
+                            "[INFO] Person's photo-vectors was received")
 
 
-def get_id_camera(model):
-    return exec_query_first(f"""select id from test.camera as c 
-                where c.model = '{model}'""",
-                            "[INFO] Id camera was received")
+def get_walls_in_location(id_location):
+    return exec_query_first(f"""select w.coord_start, w.coord_end 
+                                        from {schema_name}.wall w join {schema_name}.location l on w.id_location = l.id 
+                                        where l.id = {id_location}""",
+                            "[INFO] Person's photo-vectors was received")
 
 
-def get_id_camera_from_photo_by_id_person(id_person):
-    return exec_query_all(f"""select idcamera from test.photo as c
-    where c.idperson = '{id_person}'""",
-                          "[INFO] Id cameras from photo by id person were received")
+def get_locations_in_map(id_map):
+    return exec_query_all(f"""select l.id, l."name", l.coord, l.floor
+                                    from location l join map m on l.id_map = m.id 
+                                    where m.id = {id_map}""",
+                          "[INFO] Map locations was received")
 
 
-def get_central_points(id_camera):
-    return exec_query_all(f"""select x_central, y_central  from test.camera as c
-    where c.id = '{id_camera}'""",
-                          "[INFO] Central points were received")
+def get_user_maps(id_map):
+    return exec_query_all(f"""select m.id, m."name", m.address 
+                                from users u join "map" m on u.id = m.id_user 
+                                where u.id = {id_map}""",
+                          "[INFO] User maps was received")
+
+
+def get_location_cameras(id_location):
+    return exec_query_all(f"""select c.id, c.coord, c.angle, c.width 
+                                from "location" l join camera c on c.id_location = l.id 
+                                where l.id = {id_location}""",
+                          "[INFO] Location cameras were received")
 
 
 def get_blind_line(id_camera):
-    return exec_query_all(f"""select * from test.blindline as bl
-    where bl.idcamera1 = '{id_camera}' or bl.idcamera2 = '{id_camera}'""",
+    return exec_query_all(f"""select b.coord_start, b.coord_end 
+                                    from blind_line b
+                                    where b.id_camera1  = {id_camera} or b..id_camera2  = {id_camera}""",
                           "[INFO] Blind line were received")
+
+
+def get_camera_coords_by_id(id_person):
+    return exec_query_first(f"""select a.id, a.id_camera, a.data_time 
+                                       from appearance a join person p on a.id_person = p.id 
+                                       where p.id = {id_person}""",
+                            "[INFO] Person appearances were received")
 
 
 if __name__ == "__main__":
     pass
     # add_photo(4, 3, 'photo5')
-
