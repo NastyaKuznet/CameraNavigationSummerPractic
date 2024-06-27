@@ -5,10 +5,10 @@ def generate_exit(x0, x1, y0, y1, size_cell_x, size_cell_y):
     coord_axis = random.randint(0, 1)
     wall = random.randint(0, 1)
     if coord_axis == 0:
-        coord1 = random.randint(x0, x1 - 1) + size_cell_x / 2
+        coord1 = random.randrange(x0, x1 - size_cell_x, size_cell_x) + size_cell_x / 2
         coord2 = y0 if wall == 0 else y1
     else:
-        coord2 = random.randint(y0, y1 - 1) + size_cell_y / 2
+        coord2 = random.randrange(y0, y1 - size_cell_y, size_cell_y) + size_cell_y / 2
         coord1 = x0 if wall == 0 else x1
     return [coord1, coord2]
 
@@ -220,6 +220,25 @@ def get_out_after_y(x, y, x_now, y_now, count, count_max, y1_exit,
         return True
     elif y_now == y1_exit:
         return True
+
+
+def generate_cameras_all_cell(x0_field, x1_field, y0_field,
+                              y1_field, size_cell_x, size_cell_y):
+    x = []
+    y = []
+    koef = {0: [0.15, 0.5], 1: [0.5, 0.85], 2: [0.85, 0.5], 3: [0.5, 0.15],
+            4: [0.15, 0.15], 5: [0.15, 0.85], 6: [0.85, 0.85], 7: [0.85, 0.15]}
+    # 0<-,1/\,2->,3\/,4<-\/,5<-/\,6/\->,7->\/
+    y_step = y0_field
+    while y_step < y1_field:
+        x_step = x0_field
+        while x_step < x1_field:
+            direction = random.randint(0, len(koef) - 1)
+            x.append(x_step + size_cell_x * koef[direction][0])
+            y.append(y_step + size_cell_y * koef[direction][1])
+            x_step += size_cell_x
+        y_step += size_cell_y
+    return x, y
 
 
 if __name__ == '__main__':
