@@ -70,6 +70,8 @@ def generation_trajectory(x_exit, y_exit, x0_loc, x1_loc, y0_loc, y1_loc,
             break
         if count == count_max:
             break
+    if state:
+        append_x_y(x, y, x_exit, y_exit)
     return x, y, state
 
 
@@ -143,22 +145,24 @@ def get_out_after_x(x, y, x_now, y_now, count, count_max, x1_exit,
     if x_now > x1_exit:  # если выход слева, то идем влево
         while True:
             step = x_now - size_cell_x
-            if step == x1_exit:
-                break
+
             x_now = step
             count += 1
             append_x_y(x, y, x_now, y_now)
+            if step == x1_exit:
+                break
             if count == count_max:
                 return False
         return True
     elif x_now < x1_exit:  # если выход справа, то идем вправо
         while True:
             step = x_now + size_cell_x
-            if step == x1_exit:
-                break
+
             x_now = step
             count += 1
             append_x_y(x, y, x_now, y_now)
+            if step == x1_exit:
+                break
             if count == count_max:
                 return False
         return True
@@ -199,22 +203,24 @@ def get_out_after_y(x, y, x_now, y_now, count, count_max, y1_exit,
     if y_now > y1_exit:  # если выход снизу, то идем вниз
         while True:
             step = y_now - size_cell_y
-            if step == y1_exit:
-                break
+
             y_now = step
             count += 1
             append_x_y(x, y, x_now, y_now)
+            if step == y1_exit:
+                break
             if count == count_max:
                 return False
         return True
     elif y_now < y1_exit:  # если выход сверху, то идем вверх
         while True:
             step = y_now + size_cell_y
-            if step == y1_exit:
-                break
+
             y_now = step
             count += 1
             append_x_y(x, y, x_now, y_now)
+            if step == y1_exit:
+                break
             if count == count_max:
                 return False
         return True
