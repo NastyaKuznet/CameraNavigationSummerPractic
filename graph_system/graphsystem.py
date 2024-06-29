@@ -3,8 +3,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.colors as pcolors
 
-import setting_location as sl
-import database.db as db
 import generator as gr
 
 
