@@ -144,7 +144,7 @@ def draw_trajectory_with_point(fig, x, y):
     )
 
 
-def draw_a_lot_trajectory_with_point(fig, x_mas, y_mas,
+def draw_a_lot_trajectory_with_point(fig, x_mas, y_mas, times,
                                      colors_lines=pcolors.qualitative.Plotly,
                                      colors_points=pcolors.qualitative.Set1):
     """Отрисовывается траетории по массивам x_mas, y_mas с точками показывающими передвижение."""
@@ -157,6 +157,8 @@ def draw_a_lot_trajectory_with_point(fig, x_mas, y_mas,
     for i in range(len(x_mas)):
         fig.add_trace(go.Scatter(x=x_mas[i], y=y_mas[i],
                                  mode="lines",
+                                 text=times,
+                                 hovertemplate='Время: %{text}<br>x: %{x:.2f}<br>y: %{y:.2f}<extra></extra>',
                                  line=dict(width=2, color=colors_lines[i % len(colors_lines)])))
         points_traces.append(go.Scatter(x=[x_mas[i][0]], y=[y_mas[i][0]], mode="markers",
                                         marker=dict(color=colors_points[i % len(colors_points)], size=10),
