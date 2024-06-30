@@ -25,6 +25,6 @@ class EntryPoint:
         pass
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     entry_point = EntryPoint()
     entry_point.main()

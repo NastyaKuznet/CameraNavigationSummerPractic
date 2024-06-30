@@ -4,6 +4,7 @@
     Не записывает в БД инфу с каждого карда, а только время нахождения на камере человека
 """
 
+from multiprocessing import Process
 
 class Camera:
     def __init__(self, ip):
@@ -33,14 +34,18 @@ class Comparator:
         pass
 
 
-class Process:
-    def __init__(self, db_helper):
-        self.run = False
+class CameraProcess(Process):
+    def __init__(self, id_, conn, **kwargs):
+        super().__init__()
+        self.id = id_
+        self.run = True
         self.camera = Camera('')
         self.comparator = Comparator()
-        self.db_helper = db_helper
+        self.db_helper = kwargs['db_helper']
+        self.conn = conn
 
-    def mainloop(self):
+    # Периодически отправляет свой статус
+    def run(self):
         while self.run:
             pass
 
