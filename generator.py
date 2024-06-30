@@ -19,10 +19,8 @@ def append_x_y(x, y, x_ap, y_ap):
 
 
 def generation_trajectory(x_exit, y_exit, x0_loc, x1_loc, y0_loc, y1_loc,
-                          size_cell_x, size_cell_y, count_max_start, count_max_end,
-                          early_start, early_end):
-    count_max = random.randint(count_max_start, count_max_end)
-    early = random.randint(early_start, early_end)
+                          size_cell_x, size_cell_y, count_max):
+    early = random.randint(count_max // 100, count_max // 2)
     x = [x_exit]
     y = [y_exit]
     x_now, y_now = get_half_step(x, y, x_exit, y_exit, x0_loc, x1_loc,
