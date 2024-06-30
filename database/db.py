@@ -148,6 +148,10 @@ def get_person_appearances(id_person):
                             "[INFO] Person appearances were received")
 
 
+def get_all_person():
+    return exec_query_all(f"""select p.id from {schema_name}.person""")
+
+
 if __name__ == "__main__":
     pass
     # add_photo(4, 3, 'photo5')
