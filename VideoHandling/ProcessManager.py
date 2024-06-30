@@ -77,8 +77,9 @@ class ProcessManager:
             self.db_helper.exec("""
                                 select id, u.status
                                 from camera c
-                                join location l on l.id = c.location
-                                join user u on u.id = l.user
+                                join location l on l.id = c.id_location
+                                join map m on m.id = l.id_map
+                                join user u on u.id = m.id_user
                                 """)
 
             ids = self.db_helper.fetch_all()

@@ -6,8 +6,11 @@ class DBHelper:
         self.__con = psycopg2.connect(database=database, user=user, password=password, host=host)
         self.__cur = self.__con.cursor()
 
-    def exec(self, command):
-        self.__cur.execute(command)
+    def exec(self, command, array=None):
+        if array:
+            self.__cur.execute(command, (array, ))
+        else:
+            self.__cur.execute(command)
         self.__con.commit()
 
     def record_exist(self, id_, table):
