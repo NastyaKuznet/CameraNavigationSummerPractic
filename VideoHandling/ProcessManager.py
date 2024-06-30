@@ -18,7 +18,6 @@ import socket
 import configparser
 
 
-# Первая версия. Максимально тупая без взаимодействия с процессами
 class ProcessBank:
     def __init__(self, port):
         self.processes = {}
@@ -65,11 +64,10 @@ class ProcessManager:
     def __status(self):
         conn, addr = self.socket.accept()
         conn.settimeout(5)
-        data = conn.recv(4)
-        id_ = struct.unpack('!i', data)[0]
-        data = conn.recv(20)
-        pid = struct.unpack('!i', data)[0]
-        status = conn.recv(3).decode('utf-8', errors='ignore')
+        data = conn.recv(11)
+        id_ = struct.unpack('!I', data[0:4])[0]
+        pid = struct.unpack('!I', data[4:8])[0]
+        status = data[8:11].decode('utf-8', errors='ignore')
         conn.close()
         return id_, pid, status
 

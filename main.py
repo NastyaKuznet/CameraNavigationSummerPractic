@@ -14,7 +14,7 @@ from CameraNavigationSummerPractic.VideoHandling.ProcessManager import ProcessMa
 class Initializer:
     def __init__(self):
         self.db_helper = DBHelper(database='', user='', password='', host='')
-        self.process_manager = ProcessManager()
+        self.process_manager = ProcessManager(self.db_helper)
 
 
 class EntryPoint:
