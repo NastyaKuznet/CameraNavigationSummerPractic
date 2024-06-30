@@ -87,9 +87,9 @@ def add_appearance(id_person, id_camera, data_time: datetime):
                "[INFO] Appearance was added", True)
 
 
-def add_person(name):
-    exec_query(f"""insert into {schema_name}.person (name)
-                 values ('{name}')""",
+def add_person(name, time_in, rime_out):
+    exec_query(f"""insert into {schema_name}.person (name, time_in, time_out)
+                 values ('{name}', {ps.extensions.adapt(time_in)}, {ps.extensions.adapt(rime_out)})""",
                "[INFO] Person was added", True)
 
 
