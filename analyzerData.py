@@ -27,6 +27,8 @@ def get_generate_traj(x0, y0, x1, y1, size_x, size_y, start_time,
                               10, "2024-07-08",
                               "2024-07-08")
     x, y, state = gr.generation_trajectory(ex[0], ex[1], x0, x1, y0, y1, size_x, size_y, len(times))
+    if len(x) < len(times):
+        times = times[:len(x)]
     return x, y, state, times, ex
 
 
