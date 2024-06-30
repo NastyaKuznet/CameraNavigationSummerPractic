@@ -247,5 +247,37 @@ def generate_cameras_all_cell(x0_field, x1_field, y0_field,
     return x, y
 
 
+def generate_times(start_time, end_time, inter_time_start, inter_time_end, start_date, end_date):
+    """Нужно использовать формат 11:00, (минуты), 2023-03-01. Генерируется какое-то число
+    и генерируются точки времени."""
+    year_start, month_start, day_start = start_date.split("-")
+    year_end, month_end, day_end = end_date.split("-")
+    random_year = random.randint(int(year_start), int(year_end))
+    random_month = random.randint(int(month_start), int(month_end))
+    random_day = random.randint(int(day_start), int(day_end))
+    random_date = str(random_year) + "-" + str(random_month) + "-" + str(random_day)
+    hour_start, minute_start = start_time.split(":")
+    hour_end, minute_end = end_time.split(":")
+    hour_end = int(hour_end)
+    minute_end = int(minute_end)
+    hour_now = int(hour_start)
+    minute_now = int(minute_start)
+    times = []
+    while True:
+        if len(str(minute_now)) == 1:
+            mn = "0" + str(minute_now)
+        else:
+            mn = str(minute_now)
+        times.append(random_date + " " + str(hour_now) + ":" + mn)
+
+        step = random.randint(inter_time_start, inter_time_end)
+        hour_now += (minute_now + step) // 60
+        minute_now = (minute_now + step) % 60
+        if hour_now > hour_end and minute_now > minute_end:
+            break
+    return times
+
+
 if __name__ == '__main__':
+    #print(generate_times("11:00", "14:00", 1, 20, "2002-10-2", "2002-10-3"))
     pass
