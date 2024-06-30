@@ -7,10 +7,10 @@
     На каждую камеру отдельный процесс
 """
 
-
 import struct
 import time
 import os
+import psutil as psu
 import signal
 
 from CameraProcess import CameraProcess
@@ -37,6 +37,14 @@ class ProcessBank:
             self.processes.pop(id_)
 
 
+class ProcessInfo:
+    def __init__(self, process_pid):
+        self.pid = process_pid
+        self.process = psu.Process(self.pid)
+        self.name = self.process.name()
+        self.memory_percent = self.process.memory_percent(memtype='rss')
+
+
 class ProcessManager:
     def __init__(self, db_helper):
         self.db_helper = db_helper
@@ -53,6 +61,8 @@ class ProcessManager:
 
         self.__find_all()
 
+        self.processes_info = {}
+
     # Если вдруг класс сам умер, при новом запуске он должен найти живые процессы и не создавать новые
     # Так как пока все работает локально, нет проверки целостности
     def __find_all(self):
@@ -60,6 +70,7 @@ class ProcessManager:
         while time.time() - start < 20:
             proc_info = self.__status()
             self.process_bank.processes[proc_info[0]] = (proc_info[1], proc_info[2], time.time())
+            self.processes_info[proc_info[1]] = ProcessInfo(proc_info[1])
 
     def __status(self):
         conn, addr = self.socket.accept()
@@ -85,16 +96,20 @@ class ProcessManager:
             for id_, status in ids:
                 if id_ not in self.process_bank.processes.keys() and status == 'p':
                     self.process_bank.create(id_, db_helper=self.db_helper)
+                    self.processes_info[self.process_bank.processes[id_][0]] = ProcessInfo(self.process_bank.processes[id_][0])
                 elif id_ in self.process_bank.processes.keys() and status != 'p':
                     self.process_bank.kill(id_)
+                    self.processes_info.pop(self.process_bank.processes[id_][0])
 
             # Обновляем информацию о выживших
             start = time.time()
             while time.time() - start < 30:
                 proc_info = self.__status()
                 self.process_bank.processes[proc_info[0]][2] = time.time()
+                self.processes_info[proc_info[1]] = ProcessInfo(proc_info[1])
 
             # Если 30 секунд не подает признаков жизни, считаем, что пропал без вести, рожаем нового
             for id_, values in self.process_bank.processes.items():
                 if values[2] > 30:
                     self.process_bank.create(id_, db_helper=self.db_helper)
+                    self.processes_info[self.process_bank.processes[id_][0]] = ProcessInfo(self.process_bank.processes[id_][0])
