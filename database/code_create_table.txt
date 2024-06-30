@@ -57,3 +57,7 @@ CREATE TABLE "wall"(
 	"coord_start" point not null check("coord_start" >> point(-1, -1) and "coord_start" |>> point(-1, -1)),
     "coord_end" point NOT null check("coord_end" >> point(-1, -1) and "coord_end" |>> point(-1, -1))
 );
+
+ALTER TABLE users ADD COLUMN "password" text default '123' not null;
+ALTER TABLE person ADD COLUMN "time_in" timestamp not null;
+ALTER TABLE person ADD COLUMN "time_out" timestamp not null;
