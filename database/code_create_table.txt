@@ -1,0 +1,59 @@
+CREATE TABLE "person"(
+	"id" serial PRIMARY KEY,
+    "name" text not null default 'unidentified'
+);
+
+CREATE TABLE "photo"(
+	"id" serial PRIMARY KEY,
+    "vector" integer[] NOT null UNIQUE,
+    "id_person" integer not null references "person" ("id")
+);
+
+CREATE TABLE "users"(
+	"id" serial PRIMARY KEY,
+    "name" text NOT null
+);
+
+CREATE TABLE "map"(
+	"id" serial PRIMARY KEY,
+    "id_user" BIGINT NOT null references "users" ("id"),
+    "name" TEXT NOT NULL,
+    "address" TEXT NOT null
+);
+
+CREATE TABLE "location"(
+	"id" serial PRIMARY KEY,
+    "name" text NOT null,
+    "coord" point NOT null CHECK ("coord" >> point(-1, -1) and "coord" |>> point(-1, -1)),
+    "id_map" integer NOT null references "map" ("id"),
+    "floor" integer not null
+);
+
+CREATE TABLE "camera"(
+	"id" serial PRIMARY KEY,
+    "id_location" integer NOT null references "location" ("id"),
+    "coord" point NOT null check("coord" >> point(-1, -1) and "coord" |>> point(-1, -1)),
+    "angle" DOUBLE PRECISION NOT null check("angle" > 0),
+    "width" DOUBLE PRECISION not null check("width" > 0)
+);
+
+CREATE TABLE "appearance"(
+	"id" serial PRIMARY KEY,
+    "id_person" integer NOT null references "person" ("id"),
+    "id_camera" integer NOT null references "camera" ("id"),
+    "data_time" timestamp NOT null
+);
+
+CREATE TABLE "blind_line"(
+	"coord_start" point not null check("coord_start" >> point(-1, -1) and "coord_start" |>> point(-1, -1)),
+    "coord_end" point NOT null check("coord_end" >> point(-1, -1) and "coord_end" |>> point(-1, -1)),
+    "id_camera1" integer NOT null references "camera" ("id"),
+    "id_camera2" integer not null references "camera" ("id")
+);
+
+CREATE TABLE "wall"(
+	"id" serial PRIMARY KEY,
+    "id_location" BIGINT NOT null references "location" ("id"),
+	"coord_start" point not null check("coord_start" >> point(-1, -1) and "coord_start" |>> point(-1, -1)),
+    "coord_end" point NOT null check("coord_end" >> point(-1, -1) and "coord_end" |>> point(-1, -1))
+);
