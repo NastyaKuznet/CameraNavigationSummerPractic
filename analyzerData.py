@@ -30,11 +30,11 @@ class AnalyzerData:
     @staticmethod
     def get_generate_traj(x0, y0, x1, y1, size_x, size_y, start_time,
                           end_time):
-        ex = gr.generate_exit(x0, x1, y0, y1, size_x, size_y)
-        times = gr.generate_times(start_time, end_time, 1,
-                                  10, "2024-07-08",
-                                  "2024-07-08")
-        x, y, state = gr.generation_trajectory(ex[0], ex[1], x0, x1, y0, y1, size_x, size_y, len(times))
+        ex = gr.Generator.generate_exit(x0, x1, y0, y1, size_x, size_y)
+        times = gr.Generator.generate_times(start_time, end_time, 1,
+                                            10, "2024-07-08",
+                                            "2024-07-08")
+        x, y, state = gr.Generator.generation_trajectory(ex[0], ex[1], x0, x1, y0, y1, size_x, size_y, len(times))
         if len(x) < len(times):
             times = times[:len(x)]
         return x, y, state, times, ex
@@ -43,12 +43,12 @@ class AnalyzerData:
     def get_graph_traj_with_points(x0_field, y0_field, x1_field, y1_field, size_x, size_y,
                                    width_window, height_window, times, ex, x1, y1, x2, y2):
         field = [[x0_field, y0_field], [x1_field, y1_field]]
-        cam = gr.generate_cameras_all_cell(x0_field, x1_field, y0_field, y1_field, size_x, size_y)
+        cam = gr.Generator.generate_cameras_all_cell(x0_field, x1_field, y0_field, y1_field, size_x, size_y)
 
         fig = go.Figure()
-        gs.draw_location(fig, field, exits=[ex], cameras=cam)
-        gs.draw_chessboard(fig, x0_field, x1_field, y0_field, y1_field, size_x, size_y)
-        gs.draw_a_lot_trajectory_with_point(fig, [x1, x2], [y1, y2], times)
+        gs.GraphSystem.draw_location(fig, field, exits=[ex], cameras=cam)
+        gs.GraphSystem.draw_chessboard(fig, x0_field, x1_field, y0_field, y1_field, size_x, size_y)
+        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x1, x2], [y1, y2], times)
         fig.update_layout(
             xaxis_range=[x1, x2],
             yaxis_range=[y1, y2],
@@ -76,16 +76,31 @@ class AnalyzerData:
         id_person = db.exec_query_first(f"""select id from {cf.schema_name}.person""",
                                         "[INFO] Get first id_person")
 
-
         # берутся его "фото" и отправляются на анализ лиц и результат сохраняется в бд с тем временем,
         # что указано в times в таблице appearence
-
 
         times2 = db.exec_query_all(f"""select data_time from {cf.schema_name}.appearence
          where id_person == {id_person}""", "[INFO] Get time from appearence")
         # по таблице appearence достаем time по id человека, которого мы взяли
         state_compar, good_x, good_y, bad_x, bad_y = AnalyzerData.compare_trajectories(x, y, times, times2)
 
-        AnalyzerData.get_graph_traj_with_points(x0_f, y0_f, x1_f, y1_f, s_x, s_y, width_w, height_w,times,
+        AnalyzerData.get_graph_traj_with_points(x0_f, y0_f, x1_f, y1_f, s_x, s_y, width_w, height_w, times,
                                                 ex, x, y, good_x, good_y)
 
+    @staticmethod
+    def start_demo1():
+        id_person = db.exec_query_first(f"""select id from {cf.schema_name}.person""",
+                                        "[INFO] Get first id_person")
+        times_move = db.exec_query_all(f"""select data_time, coord from {cf.schema_name}.appearence as ap
+        join {cf.schema_name}.camera as c on ap.id_camera = c.id
+        where id_person == {id_person}""", "[INFO] Get time from appearence")
+        x = []
+        y = []
+        times = []
+        for i in range(len(times_move)):
+            x.append(times_move[1][0])
+            y.append(times_move[1][1])
+            times.append(times_move[0])
+        fig = go.Figure()
+        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig,[x], [y], times)
+        fig.show()
