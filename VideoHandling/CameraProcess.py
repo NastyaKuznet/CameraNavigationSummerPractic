@@ -13,27 +13,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 
-class Person:
-    def __init__(self):
-        self.vectors = []
-        self.face_vectors = []
-        self.imgs = []
-        self.time_in = 0
-        self.time_out = 0
-
-    def to_vec(self, image, detector):
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        keypoints, descriptors = detector.detectAndCompute(gray, None)
-        return keypoints, descriptors
-
-    @staticmethod
-    def is_similar(descriptors1, descriptors2, threshold=0.7):
-        if descriptors1 is None or descriptors2 is None:
-            return False
-        sim = cosine_similarity(descriptors1, descriptors2)
-        return np.any(sim > threshold)
-
-
 class Recognizer:
     def __init__(self, id_, db_helper):
         self.url = self.__url(id_)
