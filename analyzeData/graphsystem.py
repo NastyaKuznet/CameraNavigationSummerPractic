@@ -159,7 +159,7 @@ class GraphSystem:
         for i in range(len(x_mas)):
             fig.add_trace(go.Scatter(x=x_mas[i], y=y_mas[i],
                                      mode="lines",
-                                     text=times,
+                                     text=times[i],
                                      hovertemplate='Время: %{text}<br>x: %{x:.2f}<br>y: %{y:.2f}<extra></extra>',
                                      line=dict(width=2, color=colors_lines[i % len(colors_lines)])))
             points_traces.append(go.Scatter(x=[x_mas[i][0]], y=[y_mas[i][0]], mode="markers",

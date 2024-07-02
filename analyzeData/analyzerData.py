@@ -4,6 +4,8 @@ import generator as gr
 import graphsystem as gs
 import database.db as db
 import database.config as cf
+import RecognizeFromFile as rf
+from DBHelper import DBHelper
 
 
 class AnalyzerData:
@@ -48,7 +50,7 @@ class AnalyzerData:
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex], cameras=cam)
         gs.GraphSystem.draw_chessboard(fig, x0_field, x1_field, y0_field, y1_field, size_x, size_y)
-        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x1, x2], [y1, y2], times)
+        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x1, x2], [y1, y2], [times])
         fig.update_layout(
             xaxis_range=[x1, x2],
             yaxis_range=[y1, y2],
@@ -73,34 +75,78 @@ class AnalyzerData:
         endtime = "18:00"
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, starttime, endtime)
         # берем человека из бд
-        id_person = db.exec_query_first(f"""select id from {cf.schema_name}.person""",
-                                        "[INFO] Get first id_person")
+        #id_person = db.exec_query_first(f"""select id from {cf.schema_name}.person""","[INFO] Get first id_person")
 
         # берутся его "фото" и отправляются на анализ лиц и результат сохраняется в бд с тем временем,
         # что указано в times в таблице appearence
 
-        times2 = db.exec_query_all(f"""select data_time from {cf.schema_name}.appearence
-         where id_person == {id_person}""", "[INFO] Get time from appearence")
+        #times2 = db.exec_query_all(f"""select data_time from {cf.schema_name}.appearence where id_person == {id_person}""", "[INFO] Get time from appearence")
         # по таблице appearence достаем time по id человека, которого мы взяли
-        state_compar, good_x, good_y, bad_x, bad_y = AnalyzerData.compare_trajectories(x, y, times, times2)
+        #state_compar, good_x, good_y, bad_x, bad_y = AnalyzerData.compare_trajectories(x, y, times, times2)
 
-        AnalyzerData.get_graph_traj_with_points(x0_f, y0_f, x1_f, y1_f, s_x, s_y, width_w, height_w, times,
-                                                ex, x, y, good_x, good_y)
+        #AnalyzerData.get_graph_traj_with_points(x0_f, y0_f, x1_f, y1_f, s_x, s_y, width_w, height_w, times, ex, x, y, good_x, good_y)
 
     @staticmethod
     def start_demo1():
-        id_person = db.exec_query_first(f"""select id from {cf.schema_name}.person""",
-                                        "[INFO] Get first id_person")
-        times_move = db.exec_query_all(f"""select data_time, coord from {cf.schema_name}.appearence as ap
-        join {cf.schema_name}.camera as c on ap.id_camera = c.id
-        where id_person == {id_person}""", "[INFO] Get time from appearence")
+        #id_person = db.exec_query_first(f"""select id from {cf.schema_name}.person""","[INFO] Get first id_person")
+        #times_move = db.exec_query_all(f"""select data_time, coord from {cf.schema_name}.appearence as ap join {cf.schema_name}.camera as c on ap.id_camera = c.id where id_person == {id_person}""", "[INFO] Get time from appearence")
         x = []
         y = []
         times = []
-        for i in range(len(times_move)):
-            x.append(times_move[1][0])
-            y.append(times_move[1][1])
-            times.append(times_move[0])
+        #for i in range(len(times_move)):
+            #x.append(times_move[1][0])
+           # y.append(times_move[1][1])
+            #times.append(times_move[0])
         fig = go.Figure()
         gs.GraphSystem.draw_a_lot_trajectory_with_point(fig,[x], [y], times)
         fig.show()
+
+    @staticmethod
+    def start_demo2():
+        #базовые настройки поля
+        x0_f = 0
+        y0_f = 0
+        x1_f = 30
+        y1_f = 30
+        s_x = 1
+        s_y = 1
+        width_w = 700
+        height_w = 700
+        starttime = "12:00"
+        endtime = "18:00"
+        # генерация траектории
+        x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, starttime, endtime)
+        field = [[x0_f, y0_f], [x1_f, y1_f]]
+        #генерация камер
+        cam = gr.Generator.generate_cameras_all_cell(x0_f, x1_f, y0_f, y1_f, s_x, s_y)
+        id_person = 1
+        # переменные где будут сохраняться проанализированные траектории
+        x_a = []
+        y_a = []
+        times_a = []
+        # путь тебе надо будет поменять
+        path = r"C:\Users\user\PycharmProjects\CameraNavigationSummerPractic\resources\photos\1"
+        db_helper = DBHelper(database='cam_nav', user='postgres', password='1234', host='localhost')
+        generator = rf.RecognizeFromFile(db_helper)
+        count_photos = 10 # количество фото в папке
+        for i in range(len(x)):
+            path_ = path + str(i % count_photos)
+            id_p = generator.recognize(path_)
+            if id_p == id_person:
+                x_a.append(x[i])
+                y_a.append(y[i])
+                times_a.append(times[i])
+        #рисуем
+        fig = go.Figure()
+        gs.GraphSystem.draw_location(fig, field, exits=[ex], cameras=cam) # локация, выход, камеры
+        gs.GraphSystem.draw_chessboard(fig, x0_f, x1_f, y0_f, y1_f, s_x, s_y) # разметка в виде шахматной доски
+        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a], [y, y_a], [times, times_a]) # траектории
+        fig.update_layout(
+            xaxis_range=[x0_f, x1_f],
+            yaxis_range=[y0_f, y1_f],
+            xaxis_autorange=False,
+            yaxis_autorange=False,
+            width=width_w,
+            height=height_w,
+        ) # настройки формата
+        fig.show() # вывод
