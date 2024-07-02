@@ -14,7 +14,7 @@ class Recognizer:
         self.server: Server = server
         self.db_helper = db_helper
 
-    def get_embedding(self, img) -> list | None:
+    def get_embedding(self, img: [[]]) -> list | None:
         try:
             face_img = img.astype('float32')
             face_img = np.expand_dims(face_img, axis=0)
@@ -28,20 +28,20 @@ class Recognizer:
         ids = self.server.get_id_by_vec(embedding_vec)
         print(ids)
         names = []
-        ids = {}
+        according = {}
         for id_ in ids:
             self.db_helper.exec(f'select pe.id, pe.name from photo p '
                                 f'join person pe on pe.id = p.id_person where p.id = {id_}')
             id_, name = self.db_helper.fetch_one()
-            names.append(name[0])
-            ids[name] = id_
+            names.append(name)
+            according[name] = id_
         names_count = {}
         for i in set(names):
             names_count[i] = 0
         for i in names:
             names_count[i] += 1
         name = max(names_count, key=names_count.get)
-        return ids[name], name
+        return according[name], name
 
 
 class YOLORecognizer(Recognizer):
@@ -116,12 +116,13 @@ class YOLOWithouShow(Recognizer):
         self.xmtcnn = self.embedder.mtcnn()
         self.model = YOLO("yolov8n.pt")
         self.video = cv2.VideoCapture(source)  # "rtsp://192.168.1.2:9999/h264.sdp"
+        self.run = True
 
         # frame_skip = 60  # Количество кадров для пропуска
         # frame_count = 0
 
     def mainloop(self):
-        while True:
+        while self.run:
             ret, frame = self.video.read()
 
             if not ret:
