@@ -126,7 +126,7 @@ class AnalyzerData:
         times_a = []
         # путь тебе надо будет поменять
         path = r"C:\Users\user\PycharmProjects\CameraNavigationSummerPractic\resources\photos\1"
-        db_helper = DBHelper(database='cam_nav', user='postgres', password='1234', host='localhost')
+        db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
         generator = rf.RecognizeFromFile(db_helper)
         count_photos = 10 # количество фото в папке
         for i in range(len(x)):
