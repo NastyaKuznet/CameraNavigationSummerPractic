@@ -5,13 +5,15 @@ CREATE TABLE "person"(
 
 CREATE TABLE "photo"(
 	"id" serial PRIMARY KEY,
-    "vector" integer[] NOT null UNIQUE,
+    "vector" double precision[] NOT null,
     "id_person" integer not null references "person" ("id")
 );
 
 CREATE TABLE "users"(
 	"id" serial PRIMARY KEY,
-    "name" text NOT null
+    "name" text NOT null,
+    "status" char(1) not null default 'd',
+    "contract_begining" timestamp not null default now(),
 );
 
 CREATE TABLE "map"(
@@ -31,6 +33,7 @@ CREATE TABLE "location"(
 
 CREATE TABLE "camera"(
 	"id" serial PRIMARY KEY,
+	"ip" text unique not null,
     "id_location" integer NOT null references "location" ("id"),
     "coord" point NOT null check("coord" >> point(-1, -1) and "coord" |>> point(-1, -1)),
     "angle" DOUBLE PRECISION NOT null check("angle" > 0),
@@ -41,7 +44,7 @@ CREATE TABLE "appearance"(
 	"id" serial PRIMARY KEY,
     "id_person" integer NOT null references "person" ("id"),
     "id_camera" integer NOT null references "camera" ("id"),
-    "data_time" timestamp NOT null
+    "data_time" timestamp NOT null default now()
 );
 
 CREATE TABLE "blind_line"(
@@ -59,5 +62,3 @@ CREATE TABLE "wall"(
 );
 
 ALTER TABLE users ADD COLUMN "password" text default '123' not null;
-ALTER TABLE person ADD COLUMN "time_in" timestamp not null;
-ALTER TABLE person ADD COLUMN "time_out" timestamp not null;
