@@ -37,7 +37,6 @@ class Faceloading:
 
     def get_face(self, pers_id, number):
         path = self.directory + '\\' + str(pers_id) + '\\' + str(number)
-        print(path)
         try:
             face = self.extract_face(path)
         except Exception as e:
