@@ -23,18 +23,22 @@ class Recognizer:
         except Exception:
             return None
 
-    # Связывается с faiss
+    # Связывается с faiss, высчитывает наиболее часто встречающийся вектор
     def recognize(self, embedding_vec):
         ids = self.server.get_id_by_vec(embedding_vec)
-        max_ = 0
-        for id_ in set(ids):
-            if ids.count(id_) > max_:
-                max_ = id_
-        self.db_helper.exec(f'select pe.id, pe.name from photo p '
-                            f'join person pe on pe.id = p.id_person where p.id = {max_}')
-        id_, name = self.db_helper.fetch_one()
-
-        return id_, name
+        print(ids)
+        names = []
+        for id_ in ids:
+            self.db_helper.exec(f'select pe.name from photo p '
+                                f'join person pe on pe.id = p.id_person where p.id = {id_}')
+            name = self.db_helper.fetch_one()
+            names.append(name[0])
+        names_count = {}
+        for i in set(names):
+            names_count[i] = 0
+        for i in names:
+            names_count[i] += 1
+        return max(names_count, key=names_count.get)
 
 
 class YOLORecognizer(Recognizer):
@@ -84,7 +88,7 @@ class YOLORecognizer(Recognizer):
                                       (0, 0, 255))
                         embedding = self.get_embedding(img_color[y1 + int(y - h // 2):y1 + int(y - h // 2) + h1,
                                                        x1 + int(x - w // 2):x1 + int(x - w // 2) + w1])
-                        id_, name = self.recognize(embedding)
+                        name = self.recognize(embedding)
                         if name:
                             cv2.putText(img_color, name, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2,
                                         cv2.LINE_AA)
