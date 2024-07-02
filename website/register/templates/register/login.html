@@ -1,13 +1,11 @@
 {% extends 'mainapp/layout.html' %}
 
-{% block title %}Page{% endblock %}
-
 {% block content %}
-<h1>Main page </h1>
-
-<form method="post">
+  <h2>Вход</h2>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Войти</button>
   </form>
+  <a href="/register/">Еще нет аккаунта? Зарегистрируйтесь</a>
 {% endblock %}
