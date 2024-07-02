@@ -2,6 +2,7 @@ import os
 import numpy as np
 import cv2 as cv
 from keras_facenet import FaceNet
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 # Каждой фотке будет проставлен label в соответствии с названием подпапки, где она находилась
@@ -33,6 +34,16 @@ class Faceloading:
             except Exception as e:
                 pass
         return faces
+
+    def get_face(self, pers_id, number):
+        path = self.directory + '\\' + str(pers_id) + '\\' + str(number)
+        print(path)
+        try:
+            face = self.extract_face(path)
+        except Exception as e:
+            return 1
+
+        return face
 
     def load_classes(self):
         for sub_dir in os.listdir(self.directory):

@@ -83,6 +83,7 @@ class Server:
         pers = self.db_helper.fetch_one()
         while pers:
             self.vectors.add(pers[0], pers[1])
+            pers = self.db_helper.fetch_one()
 
     # Выбирает самого часто втречаемого, возвращает его id
     def get_id_by_vec(self, vec):

@@ -2,17 +2,14 @@ import cv2
 from ultralytics import YOLO
 from keras_facenet import FaceNet
 import numpy as np
+from CameraNavigationSummerPractic.VideoHandling.FAISS.server import Server
 
 
 class Recognizer:
-    def __init__(self, source=0):
+    def __init__(self, db_helper, server):
         self.embedder = FaceNet()
-        self.xmtcnn = self.embedder.mtcnn()
-        self.model = YOLO("yolov8n.pt")
-        self.video = cv2.VideoCapture(source)  # "rtsp://192.168.1.2:9999/h264.sdp"
-
-        # frame_skip = 60  # Количество кадров для пропуска
-        # frame_count = 0
+        self.server: Server = server
+        self.db_helper = db_helper
 
     def get_embedding(self, img):
         try:
@@ -25,7 +22,21 @@ class Recognizer:
 
     # Связывается с faiss
     def recognize(self, embedding_vec):
-        pass
+        id_ = self.server.get_id_by_vec(embedding_vec)
+        self.db_helper.exec(f'select name from person where id = {id_}')
+        name = self.db_helper.fetch_one()
+        return id_, name
+
+
+class YOLORecognizer(Recognizer):
+    def __init__(self, db_helper, server, source=0):
+        super().__init__(db_helper, server)
+        self.xmtcnn = self.embedder.mtcnn()
+        self.model = YOLO("yolov8n.pt")
+        self.video = cv2.VideoCapture(source)  # "rtsp://192.168.1.2:9999/h264.sdp"
+
+        # frame_skip = 60  # Количество кадров для пропуска
+        # frame_count = 0
 
     def mainloop(self):
         while True:
@@ -64,7 +75,9 @@ class Recognizer:
                                       (0, 0, 255))
                         embedding = self.get_embedding(img_color[y1 + int(y - h // 2):y1 + int(y - h // 2) + h1,
                                                        x1 + int(x - w // 2):x1 + int(x - w // 2) + w1])
-                        #  Далее распознаем
+                        id_, name = self.recognize(embedding)
+                        cv2.putText(img_color, name, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2,
+                                    cv2.LINE_AA)
 
             img_color = cv2.cvtColor(img_color, cv2.COLOR_BGR2RGB)
 

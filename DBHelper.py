@@ -7,7 +7,7 @@ class DBHelper:
         self.__cur = self.__con.cursor()
 
     def exec(self, command, array=None):
-        if array:
+        if array is not None:
             self.__cur.execute(command, (array, ))
         else:
             self.__cur.execute(command)
