@@ -87,9 +87,9 @@ def add_appearance(id_person, id_camera, data_time: datetime):
                "[INFO] Appearance was added", True)
 
 
-def add_person(name, time_in, rime_out):
-    exec_query(f"""insert into {schema_name}.person (name, time_in, time_out)
-                 values ('{name}', {ps.extensions.adapt(time_in)}, {ps.extensions.adapt(rime_out)})""",
+def add_person(name):
+    exec_query(f"""insert into {schema_name}.person (name)
+                 values ('{name}')""",
                "[INFO] Person was added", True)
 
 
@@ -120,10 +120,10 @@ def get_locations_in_map(id_map):
                           "[INFO] Map locations was received")
 
 
-def get_user_maps(id_map):
+def get_user_maps(id_user):
     return exec_query_all(f"""select m.id, m."name", m.address 
                                 from {schema_name}.users u join {schema_name}."map" m on u.id = m.id_user 
-                                where u.id = {id_map}""",
+                                where u.id = {id_user}""",
                           "[INFO] User maps was received")
 
 
