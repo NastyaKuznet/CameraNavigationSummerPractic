@@ -6,6 +6,7 @@
 
     Класс Initializer создает все общие объекты
 """
+import threading
 
 from CameraNavigationSummerPractic.DBHelper import DBHelper
 from CameraNavigationSummerPractic.VideoHandling.ProcessManager import ProcessManager
@@ -13,7 +14,7 @@ from CameraNavigationSummerPractic.VideoHandling.ProcessManager import ProcessMa
 
 class Initializer:
     def __init__(self):
-        self.db_helper = DBHelper(database='', user='', password='', host='')
+        self.db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
         self.process_manager = ProcessManager(self.db_helper)
 
 
@@ -22,7 +23,7 @@ class EntryPoint:
         self.initializer = Initializer()
 
     def main(self):
-        pass
+        threading.Thread(target=self.initializer.process_manager.mainloop)
 
 
 if __name__ == '__main__':
