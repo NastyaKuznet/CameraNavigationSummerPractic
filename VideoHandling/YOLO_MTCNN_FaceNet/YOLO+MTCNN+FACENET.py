@@ -1,8 +1,11 @@
+import threading
+
 import cv2
 from ultralytics import YOLO
 from keras_facenet import FaceNet
 import numpy as np
 from CameraNavigationSummerPractic.VideoHandling.FAISS.server import Server
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 class Recognizer:
@@ -22,9 +25,15 @@ class Recognizer:
 
     # Связывается с faiss
     def recognize(self, embedding_vec):
-        id_ = self.server.get_id_by_vec(embedding_vec)
-        self.db_helper.exec(f'select name from person where id = {id_}')
-        name = self.db_helper.fetch_one()
+        ids = self.server.get_id_by_vec(embedding_vec)
+        max_ = 0
+        for id_ in set(ids):
+            if ids.count(id_) > max_:
+                max_ = id_
+        self.db_helper.exec(f'select pe.id, pe.name from photo p '
+                            f'join person pe on pe.id = p.id_person where p.id = {max_}')
+        id_, name = self.db_helper.fetch_one()
+
         return id_, name
 
 
@@ -76,8 +85,9 @@ class YOLORecognizer(Recognizer):
                         embedding = self.get_embedding(img_color[y1 + int(y - h // 2):y1 + int(y - h // 2) + h1,
                                                        x1 + int(x - w // 2):x1 + int(x - w // 2) + w1])
                         id_, name = self.recognize(embedding)
-                        cv2.putText(img_color, name, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2,
-                                    cv2.LINE_AA)
+                        if name:
+                            cv2.putText(img_color, name, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2,
+                                        cv2.LINE_AA)
 
             img_color = cv2.cvtColor(img_color, cv2.COLOR_BGR2RGB)
 
@@ -90,3 +100,10 @@ class YOLORecognizer(Recognizer):
 
         self.video.release()
         cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
+    server = Server(db_helper)
+    recognizer = YOLORecognizer(db_helper, server)
+    threading.Thread(target=recognizer.mainloop).start()

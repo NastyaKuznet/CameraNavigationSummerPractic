@@ -7,6 +7,8 @@ from CameraNavigationSummerPractic.DBHelper import DBHelper
 class Vectors:
     def __init__(self, npz=None):
         self.__name_to_vec = {}
+        self.faiss_to_real_id = {}
+        self.counter = 0
 
         if npz:
             data = np.load(npz)
@@ -26,8 +28,10 @@ class Vectors:
     def dump(self, path):
         pickle.dump(self.__name_to_vec, path)
 
-    def add(self, vect, id_):
-        self.__name_to_vec.setdefault(id_, []).append(vect)
+    def add(self, id_, vect, pers_id):
+        self.__name_to_vec.setdefault(pers_id, []).append(vect)
+        self.faiss_to_real_id[self.counter] = id_
+        self.counter += 1
 
     def add_npz(self, npz):
         data = np.load(npz)
@@ -79,20 +83,19 @@ class Server:
         self.faiss.add(vecs)
 
     def __fill_vectors(self):
-        self.db_helper.exec('select vector, id_person from photo')
+        self.db_helper.exec('select id, vector, id_person from photo')
         pers = self.db_helper.fetch_one()
         while pers:
-            self.vectors.add(pers[0], pers[1])
+            self.vectors.add(pers[0], pers[1], pers[2])
             pers = self.db_helper.fetch_one()
 
-    # Выбирает самого часто втречаемого, возвращает его id
+    # Выбирает person'a, чьи вектора чаще встречаются
     def get_id_by_vec(self, vec):
         d, i = self.faiss.search(np.array((vec,)), 5)
-        max_ = 0
-        for k in set(i[0]):
-            if i[0].count(k) > max_:
-                max_ = k
-        return max_
+        real = []
+        for i in i[0]:
+            real.append(self.vectors.faiss_to_real_id.get(i))
+        return real
 
 
 # Обучение
