@@ -45,11 +45,12 @@ class Recognizer:
 
 
 class YOLORecognizer(Recognizer):
-    def __init__(self, db_helper, server, source=0):
+    def __init__(self, db_helper, server, camera, source: int | str = 0):
         super().__init__(db_helper, server)
         self.xmtcnn = self.embedder.mtcnn()
         self.model = YOLO("yolov8n.pt")
         self.video = cv2.VideoCapture(source)  # "rtsp://192.168.1.2:9999/h264.sdp"
+        self.id = camera
 
         # frame_skip = 60  # Количество кадров для пропуска
         # frame_count = 0
@@ -92,6 +93,7 @@ class YOLORecognizer(Recognizer):
                         embedding = self.get_embedding(img_color[y1 + int(y - h // 2):y1 + int(y - h // 2) + h1,
                                                        x1 + int(x - w // 2):x1 + int(x - w // 2) + w1])
                         id_, name = self.recognize(embedding)
+                        self.db_helper.exec(f'insert into appearance (id_person, id_camera) values ({id_}, {self.id})')
                         if name:
                             cv2.putText(img_color, name, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2,
                                         cv2.LINE_AA)
@@ -110,7 +112,7 @@ class YOLORecognizer(Recognizer):
 
 
 class YOLOWithouShow(Recognizer):
-    def __init__(self, db_helper, server, camera, source=0):
+    def __init__(self, db_helper, server, camera, source: int | str = 0):
         super().__init__(db_helper, server)
         self.id = camera
         self.xmtcnn = self.embedder.mtcnn()
@@ -164,6 +166,9 @@ class YOLOWithouShow(Recognizer):
 if __name__ == '__main__':
     db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
     server = Server(db_helper)
-    # recognizer = YOLORecognizer(db_helper, server)
-    recognizer = YOLOWithouShow(db_helper, server, 1)
-    threading.Thread(target=recognizer.mainloop).start()
+    recognizer1 = YOLORecognizer(db_helper, server, 2)
+    recognizer2 = YOLORecognizer(db_helper, server, 1, 'rtsp://192.168.1.2:9999/h264.sdp')
+    # recognizer1 = YOLOWithouShow(db_helper, server, 2)  # rtsp://192.168.1.2:9999/h264.sdp'
+    # recognizer2 = YOLOWithouShow(db_helper, server, 1, 'rtsp://192.168.1.2:9999/h264.sdp')
+    threading.Thread(target=recognizer1.mainloop).start()
+    threading.Thread(target=recognizer2.mainloop).start()
