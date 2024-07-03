@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from jinja2 import Template
 
 
-def index(request, path='static/cat.png'):
+def index(request, path='static/b.png'):
     return render(request, 'mainapp/index.html', {'image_url': path})
 
 
