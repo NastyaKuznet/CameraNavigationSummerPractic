@@ -47,7 +47,7 @@ def button_click(request):
             rendered_html = template.render(name='John Doe')
             return HttpResponse(rendered_html)'''
 
-            chart, answ = ad.AnalyzerData.start_demo3(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 700, 700)
+            chart, answ = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 700, 700)
             context = {'chart': chart, 'answer': answ}
             return render(request, 'mainapp/index.html', context)
     else:
