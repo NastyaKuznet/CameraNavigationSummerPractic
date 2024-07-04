@@ -1,6 +1,6 @@
 import psycopg2 as ps
 import datetime
-from database.config import host, user, password, db_name, schema_name
+from CameraNavigationSummerPractic.database.config import host, user, password, db_name, schema_name
 
 
 # здесь пока берется время из datatime.now() Так что надо будет поменять!!

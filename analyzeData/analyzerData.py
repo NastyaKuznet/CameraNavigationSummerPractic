@@ -1,11 +1,13 @@
+import os
+
 from plotly import graph_objs as go
 
 import generator as gr
 import graphsystem as gs
-import database.db as db
-import database.config as cf
-import RecognizeFromFile as rf
-from DBHelper import DBHelper
+import CameraNavigationSummerPractic.database.db as db
+import CameraNavigationSummerPractic.database.config as cf
+import CameraNavigationSummerPractic.RecognizeFromFile as rf
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 class AnalyzerData:
@@ -125,12 +127,12 @@ class AnalyzerData:
         y_a = []
         times_a = []
         # путь тебе надо будет поменять
-        path = r"C:\Users\user\PycharmProjects\CameraNavigationSummerPractic\resources\photos\1"
+        path = r"D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\1\\"
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
         generator = rf.RecognizeFromFile(db_helper)
-        count_photos = 10 # количество фото в папке
-        for i in range(len(x)):
-            path_ = path + str(i % count_photos)
+        count_photos = 4  # количество фото в папке
+        for i in os.listdir():
+            path_ = path + str(i % count_photos) + '.jpg'
             id_p = generator.recognize(path_)
             if id_p == id_person:
                 x_a.append(x[i])
@@ -150,3 +152,7 @@ class AnalyzerData:
             height=height_w,
         ) # настройки формата
         fig.show() # вывод
+
+
+if __name__ == '__main__':
+    AnalyzerData.start_demo2()

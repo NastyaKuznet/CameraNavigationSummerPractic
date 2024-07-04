@@ -8,6 +8,15 @@ from CameraNavigationSummerPractic.VideoHandling.FAISS.server import Server
 from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
+class Person:
+    def __init__(self):
+        self.vector = []
+        self.id = 0
+
+    def compare(self, vec) -> True:
+        pass
+
+
 class Recognizer:
     def __init__(self, db_helper, server):
         self.embedder = FaceNet()
@@ -164,6 +173,6 @@ class YOLOWithouShow(Recognizer):
 if __name__ == '__main__':
     db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
     server = Server(db_helper)
-    # recognizer = YOLORecognizer(db_helper, server)
-    recognizer = YOLOWithouShow(db_helper, server, 1)
+    recognizer = YOLORecognizer(db_helper, server)
+    # recognizer = YOLOWithouShow(db_helper, server, 1)
     threading.Thread(target=recognizer.mainloop).start()
