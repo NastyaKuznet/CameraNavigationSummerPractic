@@ -6,6 +6,7 @@ import CameraNavigationSummerPractic.database.db as db
 import CameraNavigationSummerPractic.database.config as cf
 import CameraNavigationSummerPractic.RecognizeFromFile as rf
 from CameraNavigationSummerPractic.DBHelper import DBHelper
+import joblib
 
 
 class AnalyzerData:
@@ -249,22 +250,22 @@ class AnalyzerData:
         calframe = inspect.getouterframes(curframe, 2)
         print('caller name:', calframe[1][3])
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
-        x2, y2, state2 = gr.Generator.generation_trajectory(ex[0], ex[1], x0_f, x1_f, y0_f, y1_f, s_x, s_y, len(times))
+        # x2, y2, state2 = gr.Generator.generation_trajectory(ex[0], ex[1], x0_f, x1_f, y0_f, y1_f, s_x, s_y, len(times))
         good_x = []
         good_y = []
         bad_x = []
         bad_y = []
-        for i in range(len(x)):
-            flag = False
-            for j in range(len(x2)):
-                if x[i] == x2[j] and y[i] == y2[j]:
-                    good_x.append(x[i])
-                    good_y.append(y[i])
-                    flag = True
-                    break
-            if flag:
-                bad_x.append(x[i])
-                bad_y.append(y[i])
+        # for i in range(len(x)):
+        #     flag = False
+        #     for j in range(len(x2)):
+        #         if x[i] == x2[j] and y[i] == y2[j]:
+        #             good_x.append(x[i])
+        #             good_y.append(y[i])
+        #             flag = True
+        #             break
+        #     if flag:
+        #         bad_x.append(x[i])
+        #         bad_y.append(y[i])
 
         field = [[x0_f, y0_f], [x1_f, y1_f]]
         # генерация камер
@@ -286,7 +287,8 @@ class AnalyzerData:
                 x_a.append(x[i])
                 y_a.append(y[i])
                 times_a.append(times[i])
-
+        joblib.dump(generator, 'generator.pkl')
+        joblib.dump(cam, 'cam.pkl')
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex], cameras=cam)  # локация, выход, камеры
         gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
@@ -301,7 +303,7 @@ class AnalyzerData:
             height=height_w,
         )  # настройки формата
         answ = AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
-                                                 [bad_x], [bad_y], [state], [state2])
+                                                 [bad_x], [bad_y], [state], [state])
         return fig.to_html(), answ  # вывод
 
 
