@@ -58,3 +58,5 @@ def button_click(request):
 def log_out(request):
     logout(request)
     return redirect('/register/login')
+
+

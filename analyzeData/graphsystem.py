@@ -4,8 +4,6 @@ import plotly.express as px
 import plotly.colors as pcolors
 
 
-
-
 class GraphSystem:
     @staticmethod
     def draw_field(fig, field):

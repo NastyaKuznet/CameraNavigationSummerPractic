@@ -1,6 +1,6 @@
 {% extends 'mainapp/layout.html' %}
 
-{% block title %}Page{% endblock %}
+{% block title %}graph{% endblock %}
 
 {% load static %}
 
@@ -40,8 +40,12 @@
         <li style="font-size:20;">{{ i }} </li>
     {% endfor %}
 </ul>
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
+<form action="{% url 'logout' %}">
     <button type="submit">Выход</button>
 </form>
+{% for group in user.groups.all %}
+    {% if group.name == 'manager' %}
+        <a href="statistic">Статистика</a>
+    {% endif %}
+{% endfor %}
 {% endblock %}

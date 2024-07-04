@@ -4,11 +4,13 @@ import analyzeData.generator as gr
 import analyzeData.graphsystem as gs
 import database.db as db
 import database.config as cf
-#import RecognizeFromFile as rf
+import RecognizeFromFile as rf
 from DBHelper import DBHelper
 
 
 class AnalyzerData:
+
+
     @staticmethod
     def compare_trajectories(x1, y1, times1, times2):
         good_x = []
@@ -213,6 +215,7 @@ class AnalyzerData:
         field = [[x0_f, y0_f], [x1_f, y1_f]]
         # генерация камер
         cam = gr.Generator.generate_cameras_all_cell(x0_f, x1_f, y0_f, y1_f, s_x, s_y)
+
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex], cameras=cam)  # локация, выход, камеры
         gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
@@ -228,6 +231,63 @@ class AnalyzerData:
         )  # настройки формата
         answ =  AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
                                           [bad_x], [bad_y], [state], [state2])
+        return fig.to_html(), answ  # вывод
+
+    @staticmethod
+    def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
+        x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
+        x2, y2, state2 = gr.Generator.generation_trajectory(ex[0], ex[1], x0_f, x1_f, y0_f, y1_f, s_x, s_y, len(times))
+        good_x = []
+        good_y = []
+        bad_x = []
+        bad_y = []
+        for i in range(len(x)):
+            flag = False
+            for j in range(len(x2)):
+                if x[i] == x2[j] and y[i] == y2[j]:
+                    good_x.append(x[i])
+                    good_y.append(y[i])
+                    flag = True
+                    break
+            if flag:
+                bad_x.append(x[i])
+                bad_y.append(y[i])
+
+        field = [[x0_f, y0_f], [x1_f, y1_f]]
+        # генерация камер
+        cam = gr.Generator.generate_cameras_all_cell(x0_f, x1_f, y0_f, y1_f, s_x, s_y)
+
+        x_a = []
+        y_a = []
+        times_a = []
+
+        id_person = 1
+        path = [r"", r""]
+        db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
+
+        generator = rf.RecognizeFromFile(db_helper)
+        for i in range(len(x)):
+            id_p = generator.recognize(path[i % len(path)])
+            if id_p == id_person:
+                x_a.append(x[i])
+                y_a.append(y[i])
+                times_a.append(times[i])
+
+        fig = go.Figure()
+        gs.GraphSystem.draw_location(fig, field, exits=[ex], cameras=cam)  # локация, выход, камеры
+        gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
+        gs.GraphSystem.draw_chessboard(fig, x0_f, x1_f, y0_f, y1_f, s_x, s_y)  # разметка в виде шахматной доски
+        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a], [y, y_a], [times, times_a])  # траектории
+        fig.update_layout(
+            xaxis_range=[x0_f, x1_f],
+            yaxis_range=[y0_f, y1_f],
+            xaxis_autorange=False,
+            yaxis_autorange=False,
+            width=width_w,
+            height=height_w,
+        )  # настройки формата
+        answ = AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
+                                                 [bad_x], [bad_y], [state], [state2])
         return fig.to_html(), answ  # вывод
 
 
