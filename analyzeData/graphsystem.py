@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.colors as pcolors
 
-import generator as gr
+
 
 
 class GraphSystem:
@@ -208,6 +208,12 @@ class GraphSystem:
             coloraxis_colorbar_title='Количество посетителей',
         )
         fig.show()
+
+    @staticmethod
+    def draw_cameras_rect(fig, cameras, size):
+        for i in range(len(cameras[0])):
+            fig.add_shape(type="rect", x0=cameras[0][i], y0=cameras[1][i], x1=cameras[0][i] + size,
+                          y1=cameras[1][i] + size, line=dict(color="blue", width=4))
 
 
 if __name__ == "__main__":

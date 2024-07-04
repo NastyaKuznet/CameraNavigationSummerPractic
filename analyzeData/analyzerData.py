@@ -1,10 +1,10 @@
 from plotly import graph_objs as go
 
-import generator as gr
-import graphsystem as gs
+import analyzeData.generator as gr
+import analyzeData.graphsystem as gs
 import database.db as db
 import database.config as cf
-import RecognizeFromFile as rf
+#import RecognizeFromFile as rf
 from DBHelper import DBHelper
 
 
@@ -30,11 +30,52 @@ class AnalyzerData:
         return len(bad_x) == 0, good_x, good_y, bad_x, bad_y
 
     @staticmethod
+    def analyze_trajectories(x_mas, y_mas, good_x_mas, good_y_mas, bad_x_mas, bad_y_mas, states_gen, states_an):
+        count_com = 0
+        count_all = 0
+        for i in range(len(x_mas)):
+            for j in range(len(x_mas[i])):
+                for k in range(len(good_x_mas)):
+                    if x_mas[i][j] == good_x_mas[i][k] and y_mas[i][j] == good_y_mas[i][k]:
+                        count_com += 1
+                        break
+                count_all += len(x_mas[i])
+        proc_com = round(count_com / count_all * 100, 2)
+        count_go_out = 0
+        for i in states_gen:
+            if i:
+                count_go_out += 1
+        count_go_out_an = 0
+        for i in states_an:
+            if i:
+                count_go_out_an += 1
+        points = []
+        for i in range(len(bad_x_mas)):
+            points.append([])
+            for j in range(len(bad_x_mas[i])):
+                points[i].append((bad_x_mas[i][j], bad_y_mas[i][j]))
+
+        answer = [f"Описание \n ",
+                  f"Сколько вышло из здания (сгененрированно): {count_go_out}\n",
+                  f"Сколько НЕ вышло из здания (сгененрированно): {len(states_gen) - count_go_out}\n",
+                  f"Сколько вышло из здания (проанализировано): {count_go_out_an}\n",
+                  f"Сколько НЕ вышло из здания (проанализировано): {len(states_an) - count_go_out_an}\n",
+                  f"Процент совпадения: {proc_com}%\n",
+                  f"Не совпавшие координаты: \n"]
+        for i in range(len(points)):
+            answer.append(f"{i+1}: {points[i]}\n")
+        return answer
+
+
+
+
+
+    @staticmethod
     def get_generate_traj(x0, y0, x1, y1, size_x, size_y, start_time,
                           end_time):
         ex = gr.Generator.generate_exit(x0, x1, y0, y1, size_x, size_y)
         times = gr.Generator.generate_times(start_time, end_time, 1,
-                                            10, "2024-07-08",
+                                            5, "2024-07-08",
                                             "2024-07-08")
         x, y, state = gr.Generator.generation_trajectory(ex[0], ex[1], x0, x1, y0, y1, size_x, size_y, len(times))
         if len(x) < len(times):
@@ -127,6 +168,7 @@ class AnalyzerData:
         # путь тебе надо будет поменять
         path = r"C:\Users\user\PycharmProjects\CameraNavigationSummerPractic\resources\photos\1"
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
+        '''
         generator = rf.RecognizeFromFile(db_helper)
         count_photos = 10 # количество фото в папке
         for i in range(len(x)):
@@ -149,4 +191,45 @@ class AnalyzerData:
             width=width_w,
             height=height_w,
         ) # настройки формата
-        fig.show() # вывод
+        fig.show() # вывод'''
+
+    @staticmethod
+    def start_demo3(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
+        x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
+        x2, y2, state2 = gr.Generator.generation_trajectory(ex[0], ex[1], x0_f, x1_f, y0_f, y1_f, s_x, s_y, len(times))
+        good_x = []; good_y = []; bad_x = []; bad_y = []
+        for i in range(len(x)):
+            flag = False
+            for j in range(len(x2)):
+                if x[i] == x2[j] and y[i] == y2[j]:
+                    good_x.append(x[i])
+                    good_y.append(y[i])
+                    flag = True
+                    break
+            if flag:
+                bad_x.append(x[i])
+                bad_y.append(y[i])
+
+        field = [[x0_f, y0_f], [x1_f, y1_f]]
+        # генерация камер
+        cam = gr.Generator.generate_cameras_all_cell(x0_f, x1_f, y0_f, y1_f, s_x, s_y)
+        fig = go.Figure()
+        gs.GraphSystem.draw_location(fig, field, exits=[ex], cameras=cam)  # локация, выход, камеры
+        gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
+        gs.GraphSystem.draw_chessboard(fig, x0_f, x1_f, y0_f, y1_f, s_x, s_y)  # разметка в виде шахматной доски
+        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x2], [y, y2], [times, times])  # траектории
+        fig.update_layout(
+            xaxis_range=[x0_f, x1_f],
+            yaxis_range=[y0_f, y1_f],
+            xaxis_autorange=False,
+            yaxis_autorange=False,
+            width=width_w,
+            height=height_w,
+        )  # настройки формата
+        answ =  AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
+                                          [bad_x], [bad_y], [state], [state2])
+        return fig.to_html(), answ  # вывод
+
+
+if __name__ == "__main__":
+    AnalyzerData.start_demo2()

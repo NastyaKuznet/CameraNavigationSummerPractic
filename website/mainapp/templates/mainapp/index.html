@@ -5,12 +5,23 @@
 {% load static %}
 
 {% block content %}
-<div style="position: relative;">
-  <img id="graph" src="{{image_url}}" alt="alt" style="width: 400px; height: 432px;">
-  <span style="position: absolute; top: 0; right: 450; font-size: 20px; padding: 2px 5px;">Параметры построения графа</span>
-  <div style="position: absolute; top: 0; right: 450; font-size: 20px; padding: 32px 405px;">
+<style>
+    ul {
+      list-style-type: none;
+      padding: 0; /* Убираем стандартный отступ списка */
+    }
+    li {
+      margin-bottom: 10px; /* Добавляем отступ между элементами */
+    }
+  </style>
+<div style="position: relative;background-color: #f0f0f0;">
+  <!--<img id="graph" src="{{image_url}}" alt="alt" style="width: 400px; height: 432px;">-->
+    {{ chart|safe }}
+
+  <div style="position: absolute; top: 0; right: 0; font-size: 20px; padding: 32px 10px;">
     <form action="{% url 'button_click' %}" method="post">
         {% csrf_token %}
+        <span style="position: absolute; top: 0; right: 450; font-size: 20px; padding: 2px 5px;">Параметры построения графа</span>
         <p> Левая нижняя точка X: <input type="text" name="lx" font-size="20" value="0"></p>
         <p> Левая нижняя точка Y: <input type="text" name="ly" font-size="20" value="0"></p>
         <p> Правая верхняя точка X: <input type="text" name="rx" font-size="20" value="20"></p>
@@ -24,6 +35,13 @@
   </div>
 
 </div>
-<p font-size="20">Описание</p>
-
+<ul>
+    {% for i in answer %}
+        <li style="font-size:20;">{{ i }} </li>
+    {% endfor %}
+</ul>
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Выход</button>
+</form>
 {% endblock %}

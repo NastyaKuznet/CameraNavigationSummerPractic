@@ -1,13 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django import forms
 from django.utils.safestring import mark_safe
 from jinja2 import Template
+from django.contrib.auth import logout
+
+import sys
+sys.path.append('C:\\Users\\user\PycharmProjects\CameraNavigationSummerPractic')
+import analyzeData.analyzerData as ad
 
 
-def index(request, path='static/b.png'):
-    return render(request, 'mainapp/index.html', {'image_url': path})
+@login_required()
+def index(request, context={'image_url': 'static/b.png'}):
+    return render(request, 'mainapp/index.html', context)
 
 
 class MyForm(forms.Form):
@@ -21,6 +27,7 @@ class MyForm(forms.Form):
     te = forms.CharField(max_length=255)
 
 
+@login_required()
 def button_click(request):
     if request.method == 'POST':
         form = MyForm(request.POST)
@@ -40,6 +47,14 @@ def button_click(request):
             rendered_html = template.render(name='John Doe')
             return HttpResponse(rendered_html)'''
 
-            return index(request, image_path)
+            chart, answ = ad.AnalyzerData.start_demo3(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 700, 700)
+            context = {'chart': chart, 'answer': answ}
+            return render(request, 'mainapp/index.html', context)
     else:
-        return index(request)
+        return render(request, 'mainapp/index.html')
+
+
+@login_required()
+def log_out(request):
+    logout(request)
+    return redirect('/register/login')
