@@ -1,0 +1,51 @@
+{% extends 'mainapp/layout.html' %}
+
+{% block title %}graph{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    ul {
+      list-style-type: none;
+      padding: 0; /* Убираем стандартный отступ списка */
+    }
+    li {
+      margin-bottom: 10px; /* Добавляем отступ между элементами */
+    }
+  </style>
+<div style="position: relative;background-color: #f0f0f0;">
+  <!--<img id="graph" src="{{image_url}}" alt="alt" style="width: 400px; height: 432px;">-->
+    {{ chart|safe }}
+
+  <div style="position: absolute; top: 0; right: 0; font-size: 20px; padding: 32px 10px;">
+    <form action="{% url 'button_click' %}" method="post">
+        {% csrf_token %}
+        <span style="position: absolute; top: 0; right: 450; font-size: 20px; padding: 2px 5px;">Параметры построения графа</span>
+        <p> Левая нижняя точка X: <input type="text" name="lx" font-size="20" value="0"></p>
+        <p> Левая нижняя точка Y: <input type="text" name="ly" font-size="20" value="0"></p>
+        <p> Правая верхняя точка X: <input type="text" name="rx" font-size="20" value="20"></p>
+        <p> Правая верхняя точка Y: <input type="text" name="ry" font-size="20" value="20"></p>
+        <p> Ширина ячейки: <input type="text" name="sx" font-size="20" value="1"></p>
+        <p> Высота ячейки: <input type="text" name="sy" font-size="20" value="1"></p>
+        <p> Время начала(HH:MM): <input type="text" name="ts" font-size="20" value="12:00"></p>
+        <p> Время конца(HH:MM): <input type="text" name="te" font-size="20" value="18:00"></p>
+        <button type="submit">Ввод</button>
+    </form>
+  </div>
+
+</div>
+<ul>
+    {% for i in answer %}
+        <li style="font-size:20;">{{ i }} </li>
+    {% endfor %}
+</ul>
+<form action="{% url 'logout' %}">
+    <button type="submit">Выход</button>
+</form>
+{% for group in user.groups.all %}
+    {% if group.name == 'manager' %}
+        <a href="statistic">Статистика</a>
+    {% endif %}
+{% endfor %}
+{% endblock %}
