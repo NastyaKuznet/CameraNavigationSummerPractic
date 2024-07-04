@@ -1,5 +1,5 @@
-from VideoHandling.YOLO_MTCNN_FaceNet.vectors_from_photo import Faceloading
-from DBHelper import DBHelper
+from CameraNavigationSummerPractic.VideoHandling.YOLO_MTCNN_FaceNet.vectors_from_photo import Faceloading
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 import numpy as np
 import os
 

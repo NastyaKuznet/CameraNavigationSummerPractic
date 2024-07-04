@@ -1,9 +1,10 @@
 import cv2 as cv
-from VideoHandling.YOLO_MTCNN_FaceNet.YOLO_MTCNN_FACENET import Recognizer
-from VideoHandling.FAISS.server import Server
+from CameraNavigationSummerPractic.VideoHandling.YOLO_MTCNN_FaceNet.YOLO_MTCNN_FACENET import Recognizer
+from CameraNavigationSummerPractic.VideoHandling.FAISS.server import Server
 from keras_facenet import FaceNet
-from DBHelper import DBHelper
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 import os
+import inspect
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 class RecognizeFromFile:
@@ -15,6 +16,9 @@ class RecognizeFromFile:
         self.xmtcnn = self.embedder.mtcnn()
 
     def recognize(self, filename):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         img = cv.imread(filename)
         faces = self.xmtcnn.detect_faces(img)
 

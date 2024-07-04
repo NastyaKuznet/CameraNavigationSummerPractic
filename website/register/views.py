@@ -9,7 +9,7 @@ from django.contrib.auth.views import LoginView
 
 import sys
 sys.path.append('C:\\Users\\user\PycharmProjects\CameraNavigationSummerPractic')
-import database.db as db
+import CameraNavigationSummerPractic.database.db as db
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -26,7 +26,7 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, f'Аккаунт создан для {user.username}!')
-            db.add_user(user.username, user.password)
+            # db.add_user(user.username, user.password)
             return redirect('/')
     else:
         form = RegisterForm()

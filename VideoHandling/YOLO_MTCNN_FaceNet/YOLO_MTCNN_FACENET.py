@@ -4,8 +4,8 @@ import cv2
 from ultralytics import YOLO
 from keras_facenet import FaceNet
 import numpy as np
-from VideoHandling.FAISS.server import Server
-from DBHelper import DBHelper
+from CameraNavigationSummerPractic.VideoHandling.FAISS.server import Server
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 class Recognizer:

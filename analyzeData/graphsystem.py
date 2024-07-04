@@ -2,11 +2,15 @@ from plotly import graph_objs as go
 import pandas as pd
 import plotly.express as px
 import plotly.colors as pcolors
+import inspect
 
 
 class GraphSystem:
     @staticmethod
     def draw_field(fig, field):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает на объекте fig прямоугольник. Field массив состоящий из двух массивов:
         первый - левая нижняя точка x, y, второй - правая верхняя точка x, y."""
         fig.add_shape(type="rect", x0=field[0][0], y0=field[0][1], x1=field[1][0], y1=field[1][1],
@@ -17,6 +21,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_walls(fig, walls):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает стены. Walls массив состоящий из массивов длиной 2,
         где для i=0,n walls[i][0] = x, walls[i][1] = y."""
         for wall in walls:
@@ -25,6 +32,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_cameras(fig, cameras):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает камеры в виде синих точек. Cameras массив из двух подмассивов:
         первый - все x, второй - все y."""
         fig.add_trace(go.Scatter(x=cameras[0], y=cameras[1], mode='markers',
@@ -32,6 +42,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_selected_field(fig, selected_fields):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает полупрозрачные секции оранжевого цвета. Selected_fields массив,
         состоящий из массивов, каждый из которых описывает одну секцию. Массив одной
         секции состоит из двух массивов: первый - левая нижняя точка [x, y],
@@ -43,6 +56,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_exits(fig, exits):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает указатель с надписью Вход/выход. Exits массив состоящий из массивов,
         каждый из которых содержит координаты x, y каждого входа."""
         for ex in exits:
@@ -51,6 +67,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_location(fig, field, walls=None, cameras=None, selected_fields=None, exits=None):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает поле, а также стены, камеры, выделенные поля, выходы, если они указаны."""
         GraphSystem.draw_field(fig, field)
         if walls is not None:
@@ -64,6 +83,9 @@ class GraphSystem:
 
     @staticmethod
     def line_field(fig, width, height, x0_field, y0_field, x1_field, y1_field):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает сетку по полю ограниченному x0_field, y0_field, x1_field, y1_field.
         Ширина и высота ячейки сетки задается width, height."""
         x0 = x0_field
@@ -83,6 +105,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_chessboard(fig, x0_field, x1_field, y0_field, y1_field, size_x, size_y):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывает полупрозрачную шахматную доску оранжевым и зеленым цветом по
         полю ограниченному x0_field, x1_field, y0_field, y1_field, где ширина и длина
         клеток задается size_x, size_y"""
@@ -111,6 +136,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_trajectory(fig, x, y):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывается траетория по массивам x, y."""
 
         fig.add_trace(go.Scatter(x=x, y=y, mode='lines',
@@ -118,6 +146,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_trajectory_with_point(fig, x, y):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывается траетория по массивам x, y с точкой показывающей передвижение."""
         fig = go.Figure(
             data=[go.Scatter(x=x, y=y,
@@ -147,6 +178,9 @@ class GraphSystem:
     def draw_a_lot_trajectory_with_point(fig, x_mas, y_mas, times,
                                          colors_lines=pcolors.qualitative.Plotly,
                                          colors_points=pcolors.qualitative.Set1):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Отрисовывается траетории по массивам x_mas, y_mas с точками показывающими передвижение."""
         points_traces = []
         max_len = 0
@@ -189,6 +223,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_heatmap_time_count_people(data):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         df = pd.DataFrame(data)
         df['date'] = pd.to_datetime(df['date'])
         df['time'] = pd.to_datetime(df['time'], format='%H:%M').dt.time
@@ -209,6 +246,9 @@ class GraphSystem:
 
     @staticmethod
     def draw_cameras_rect(fig, cameras, size):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         for i in range(len(cameras[0])):
             fig.add_shape(type="rect", x0=cameras[0][i], y0=cameras[1][i], x1=cameras[0][i] + size,
                           y1=cameras[1][i] + size, line=dict(color="blue", width=4))

@@ -7,8 +7,8 @@ from jinja2 import Template
 from django.contrib.auth import logout
 
 import sys
-sys.path.append('C:\\Users\\user\PycharmProjects\CameraNavigationSummerPractic')
-import analyzeData.analyzerData as ad
+sys.path.append('D:\Python\CameraNavigation\\')
+import CameraNavigationSummerPractic.analyzeData.analyzerData as ad
 
 
 @login_required()

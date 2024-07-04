@@ -1,18 +1,19 @@
 from plotly import graph_objs as go
-
-import analyzeData.generator as gr
-import analyzeData.graphsystem as gs
-import database.db as db
-import database.config as cf
-import RecognizeFromFile as rf
-from DBHelper import DBHelper
+import inspect
+import CameraNavigationSummerPractic.analyzeData.generator as gr
+import CameraNavigationSummerPractic.analyzeData.graphsystem as gs
+import CameraNavigationSummerPractic.database.db as db
+import CameraNavigationSummerPractic.database.config as cf
+import CameraNavigationSummerPractic.RecognizeFromFile as rf
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 class AnalyzerData:
-
-
     @staticmethod
     def compare_trajectories(x1, y1, times1, times2):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         good_x = []
         good_y = []
         bad_x = []
@@ -33,6 +34,9 @@ class AnalyzerData:
 
     @staticmethod
     def analyze_trajectories(x_mas, y_mas, good_x_mas, good_y_mas, bad_x_mas, bad_y_mas, states_gen, states_an):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         count_com = 0
         count_all = 0
         for i in range(len(x_mas)):
@@ -75,6 +79,9 @@ class AnalyzerData:
     @staticmethod
     def get_generate_traj(x0, y0, x1, y1, size_x, size_y, start_time,
                           end_time):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         ex = gr.Generator.generate_exit(x0, x1, y0, y1, size_x, size_y)
         times = gr.Generator.generate_times(start_time, end_time, 1,
                                             5, "2024-07-08",
@@ -87,6 +94,9 @@ class AnalyzerData:
     @staticmethod
     def get_graph_traj_with_points(x0_field, y0_field, x1_field, y1_field, size_x, size_y,
                                    width_window, height_window, times, ex, x1, y1, x2, y2):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         field = [[x0_field, y0_field], [x1_field, y1_field]]
         cam = gr.Generator.generate_cameras_all_cell(x0_field, x1_field, y0_field, y1_field, size_x, size_y)
 
@@ -235,6 +245,9 @@ class AnalyzerData:
 
     @staticmethod
     def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
         x2, y2, state2 = gr.Generator.generation_trajectory(ex[0], ex[1], x0_f, x1_f, y0_f, y1_f, s_x, s_y, len(times))
         good_x = []
@@ -262,13 +275,14 @@ class AnalyzerData:
         times_a = []
 
         id_person = 1
-        path = [r"", r""]
+        path = [r"D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\1\1.jpg",
+                r"D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\1\3.jpg"]
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
 
         generator = rf.RecognizeFromFile(db_helper)
         for i in range(len(x)):
             id_p = generator.recognize(path[i % len(path)])
-            if id_p == id_person:
+            if id_person in id_p:
                 x_a.append(x[i])
                 y_a.append(y[i])
                 times_a.append(times[i])
@@ -292,4 +306,4 @@ class AnalyzerData:
 
 
 if __name__ == "__main__":
-    AnalyzerData.start_demo2()
+    AnalyzerData.start_demo4(0, 0, 20, 20, 1, 1, '12:00', '18:00', 600, 600)
