@@ -3,7 +3,9 @@ from CameraNavigationSummerPractic.VideoHandling.YOLO_MTCNN_FaceNet.YOLO_MTCNN_F
 from CameraNavigationSummerPractic.VideoHandling.FAISS.server import Server
 from keras_facenet import FaceNet
 from CameraNavigationSummerPractic.DBHelper import DBHelper
-
+import os
+import inspect
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 class RecognizeFromFile:
     def __init__(self, db_helper):
@@ -14,6 +16,9 @@ class RecognizeFromFile:
         self.xmtcnn = self.embedder.mtcnn()
 
     def recognize(self, filename):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         img = cv.imread(filename)
         faces = self.xmtcnn.detect_faces(img)
 
@@ -28,9 +33,9 @@ class RecognizeFromFile:
 
 
 if __name__ == '__main__':
-    db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
+    db_helper = DBHelper(database='cam_nav', user='postgres', password='1234', host='localhost')
     generator = RecognizeFromFile(db_helper)
-    ids = generator.recognize(r"D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\1\1.jpg")
+    ids = generator.recognize(r"D:\практика\CameraNavigationSummerPractic\resources\photos\1\1.jpg")
 
     for i in ids:
         print("id person'a в таблице person", i)

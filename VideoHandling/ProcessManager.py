@@ -17,6 +17,8 @@ from CameraProcess import CameraProcess
 import socket
 import configparser
 
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
 
 class ProcessBank:
     def __init__(self, port):
