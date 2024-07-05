@@ -5,5 +5,13 @@
 {% load static %}
 
 {% block content %}
-Статистика
+    <p>Статистика</p>
+
+    <form action="{% url 'statistics' %}" method="post">
+        {% csrf_token %}
+        <p><span>За сколько дней посмотреть статистику?</span></p>
+        <input type="text" name="count_days" font-size="20" value="3" pattern="[0-9]+">
+        <button type="submit">Ввод</button>
+    </form>
+    {{ chart|safe }}
 {% endblock %}

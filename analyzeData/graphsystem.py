@@ -144,7 +144,7 @@ class GraphSystem:
         )
 
     @staticmethod
-    def draw_a_lot_trajectory_with_point(fig, x_mas, y_mas, times,
+    def draw_a_lot_trajectory_with_point(fig, x_mas, y_mas, times, names_line, names_point,
                                          colors_lines=pcolors.qualitative.Plotly,
                                          colors_points=pcolors.qualitative.Set1):
         """Отрисовывается траетории по массивам x_mas, y_mas с точками показывающими передвижение."""
@@ -159,7 +159,8 @@ class GraphSystem:
                                      mode="lines",
                                      text=times[i],
                                      hovertemplate='Время: %{text}<br>x: %{x:.2f}<br>y: %{y:.2f}<extra></extra>',
-                                     line=dict(width=2, color=colors_lines[i % len(colors_lines)])))
+                                     line=dict(width=2, color=colors_lines[i % len(colors_lines)]),
+                                     name=names_line[i]))
             points_traces.append(go.Scatter(x=[x_mas[i][0]], y=[y_mas[i][0]], mode="markers",
                                             marker=dict(color=colors_points[i % len(colors_points)], size=10),
                                             name=f'Point {i}'))
@@ -182,7 +183,7 @@ class GraphSystem:
                     y=[y_now],
                     mode="markers",
                     marker=dict(color=colors_points[i % len(colors_points)], size=10),
-                    name=f'Point {i}'
+                    name=names_point[i]
                 ))
             frames.append(go.Frame(data=frame_data))
         fig.frames = frames

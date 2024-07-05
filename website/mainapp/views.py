@@ -1,19 +1,18 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django import forms
-from django.utils.safestring import mark_safe
-from jinja2 import Template
 from django.contrib.auth import logout
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 import sys
 sys.path.append('C:\\Users\\user\PycharmProjects\CameraNavigationSummerPractic')
 import analyzeData.analyzerData as ad
 
-
 @login_required()
-def index(request, context={'image_url': 'static/b.png'}):
-    return render(request, 'mainapp/index.html', context)
+def index(request):
+    return render(request, 'mainapp/index.html')
 
 
 class MyForm(forms.Form):
@@ -40,14 +39,7 @@ def button_click(request):
             size_y = form.cleaned_data['sy']
             time_start: str = form.cleaned_data['ts']
             time_end: str = form.cleaned_data['te']
-            image_path = '../static/kot.gif'
-
-            # хтмл код можно так отрендерить и отдать:
-            '''template = Template('<h1>Hello, {{ name }}!</h1>')
-            rendered_html = template.render(name='John Doe')
-            return HttpResponse(rendered_html)'''
-
-            chart, answ = ad.AnalyzerData.start_demo3(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 700, 700)
+            chart, answ = ad.AnalyzerData.start_demo3(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
             context = {'chart': chart, 'answer': answ}
             return render(request, 'mainapp/index.html', context)
     else:
@@ -60,3 +52,7 @@ def log_out(request):
     return redirect('/register/login')
 
 
+class UserActivity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(default=timezone.now)
