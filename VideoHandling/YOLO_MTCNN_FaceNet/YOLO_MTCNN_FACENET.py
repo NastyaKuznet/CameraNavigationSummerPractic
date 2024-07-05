@@ -168,7 +168,7 @@ if __name__ == '__main__':
     server = Server(db_helper)
     recognizer1 = YOLORecognizer(db_helper, server, 2)
     recognizer2 = YOLORecognizer(db_helper, server, 1, 'rtsp://192.168.1.2:9999/h264.sdp')
-    # recognizer1 = YOLOWithouShow(db_helper, server, 2)  # rtsp://192.168.1.2:9999/h264.sdp'
-    # recognizer2 = YOLOWithouShow(db_helper, server, 1, 'rtsp://192.168.1.2:9999/h264.sdp')
+    # recognizer1 = YOLOWithouShow(__db_helper, server, 2)  # rtsp://192.168.1.2:9999/h264.sdp'
+    # recognizer2 = YOLOWithouShow(__db_helper, server, 1, 'rtsp://192.168.1.2:9999/h264.sdp')
     threading.Thread(target=recognizer1.mainloop).start()
     threading.Thread(target=recognizer2.mainloop).start()

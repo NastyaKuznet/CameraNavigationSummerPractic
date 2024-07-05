@@ -4,7 +4,6 @@ import cv2 as cv
 from keras_facenet import FaceNet
 from CameraNavigationSummerPractic.DBHelper import DBHelper
 
-
 # Каждой фотке будет проставлен label в соответствии с названием подпапки, где она находилась
 class Faceloading:
     def __init__(self, directory):

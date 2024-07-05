@@ -62,7 +62,7 @@ class CameraProcess(Process):
     def __init__(self, id_, port, **kwargs):
         super().__init__()
         self.id = id_
-        self.db_helper = kwargs['db_helper']
+        self.db_helper = kwargs['__db_helper']
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.port = port

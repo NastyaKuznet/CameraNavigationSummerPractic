@@ -182,7 +182,7 @@ class AnalyzerData:
         path = r"C:\Users\user\PycharmProjects\CameraNavigationSummerPractic\resources\photos\1"
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
         '''
-        generator = rf.RecognizeFromFile(db_helper)
+        generator = rf.RecognizeFromFile(__db_helper)
         count_photos = 10 # количество фото в папке
         for i in range(len(x)):
             path_ = path + str(i % count_photos)
