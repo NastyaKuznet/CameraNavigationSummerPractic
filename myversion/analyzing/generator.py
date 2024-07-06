@@ -234,6 +234,9 @@ class Generator:
     @staticmethod
     def generate_cameras_all_cell(x0_field, x1_field, y0_field,
                                   y1_field, size_cell_x, size_cell_y):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         x = []
         y = []
         koef = {0: [0.15, 0.5], 1: [0.5, 0.85], 2: [0.85, 0.5], 3: [0.5, 0.15],
@@ -252,6 +255,9 @@ class Generator:
 
     @staticmethod
     def generate_times(start_time, end_time, inter_time_start, inter_time_end, start_date, end_date):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        print('caller name:', calframe[1][3])
         """Нужно использовать формат 11:00, (минуты), 2023-03-01. Генерируется какое-то число
         и генерируются точки времени."""
         year_start, month_start, day_start = start_date.split("-")
