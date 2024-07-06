@@ -228,7 +228,7 @@ class AnalyzerData:
             width=width_w,
             height=height_w,
         )  # настройки формата
-        answ =  AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
+        answ = AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
                                           [bad_x], [bad_y], [state], [state2])
         return fig.to_html(), answ  # вывод
 
