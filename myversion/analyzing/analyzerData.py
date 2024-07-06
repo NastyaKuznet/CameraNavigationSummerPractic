@@ -12,9 +12,6 @@ import joblib
 class AnalyzerData:
     @staticmethod
     def compare_trajectories(x1, y1, times1, times2):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         good_x = []
         good_y = []
         bad_x = []
@@ -35,9 +32,6 @@ class AnalyzerData:
 
     @staticmethod
     def analyze_trajectories(x_mas, y_mas, good_x_mas, good_y_mas, bad_x_mas, bad_y_mas, states_gen, states_an):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         count_com = 0
         count_all = 0
         for i in range(len(x_mas)):
@@ -80,9 +74,6 @@ class AnalyzerData:
     @staticmethod
     def get_generate_traj(x0, y0, x1, y1, size_x, size_y, start_time,
                           end_time):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         ex = gr.Generator.generate_exit(x0, x1, y0, y1, size_x, size_y)
         times = gr.Generator.generate_times(start_time, end_time, 1,
                                             5, "2024-07-08",
@@ -95,9 +86,6 @@ class AnalyzerData:
     @staticmethod
     def get_graph_traj_with_points(x0_field, y0_field, x1_field, y1_field, size_x, size_y,
                                    width_window, height_window, times, ex, x1, y1, x2, y2):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         field = [[x0_field, y0_field], [x1_field, y1_field]]
         cam = gr.Generator.generate_cameras_all_cell(x0_field, x1_field, y0_field, y1_field, size_x, size_y)
 

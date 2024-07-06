@@ -1,12 +1,10 @@
 import random
 import inspect
 
+
 class Generator:
     @staticmethod
     def generate_exit(x0, x1, y0, y1, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         coord_axis = random.randint(0, 1)
         wall = random.randint(0, 1)
         if coord_axis == 0:
@@ -28,9 +26,6 @@ class Generator:
     @staticmethod
     def generation_trajectory(x_exit, y_exit, x0_loc, x1_loc, y0_loc, y1_loc,
                               size_cell_x, size_cell_y, count_max):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         early = random.randint(count_max // 100, count_max // 2)
         x = [x_exit]
         y = [y_exit]
@@ -85,9 +80,6 @@ class Generator:
 
     @staticmethod
     def get_half_step(x, y, x_exit, y_exit, x0_loc, x1_loc, y0_loc, y1_loc, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         if y_exit == y0_loc:  # вход снизу
             x_now = x_exit
             y_now = y_exit + size_cell_y / 2
@@ -106,9 +98,6 @@ class Generator:
     @staticmethod
     def get_out(x, y, x_now, y_now, count, count_max, x_exit, y_exit, x1_exit, y1_exit,
                 x0_loc, x1_loc, y0_loc, y1_loc, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         while count <= count_max:
             if y_exit == y0_loc:  # вход снизу
                 return Generator.get_out_down(x, y, x_now, y_now, count, count_max, x1_exit,
@@ -129,9 +118,6 @@ class Generator:
     @staticmethod
     def get_out_down(x, y, x_now, y_now, count, count_max, x1_exit,
                      y0_loc, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         while True:  # идем до упора вниз
             step = y_now - size_cell_y
             if step <= y0_loc:
@@ -146,9 +132,6 @@ class Generator:
     @staticmethod
     def get_out_up(x, y, x_now, y_now, count, count_max, x1_exit,
                    y1_loc, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         while True:  # идем до упора вверх
             step = y_now + size_cell_y
             if step >= y1_loc:
@@ -163,9 +146,6 @@ class Generator:
     @staticmethod
     def get_out_after_x(x, y, x_now, y_now, count, count_max, x1_exit,
                         size_cell_x):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         if x_now > x1_exit:  # если выход слева, то идем влево
             while True:
                 step = x_now - size_cell_x
@@ -196,9 +176,6 @@ class Generator:
     @staticmethod
     def get_out_left(x, y, x_now, y_now, count, count_max, y1_exit,
                      x0_loc, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         while True:  # идем до упора влево
             step = x_now - size_cell_x
             if step <= x0_loc:
@@ -213,9 +190,6 @@ class Generator:
     @staticmethod
     def get_out_right(x, y, x_now, y_now, count, count_max, y1_exit,
                       x1_loc, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         while True:  # идем до упора вправо
             step = x_now + size_cell_x
             if step >= x1_loc:
@@ -230,9 +204,6 @@ class Generator:
     @staticmethod
     def get_out_after_y(x, y, x_now, y_now, count, count_max, y1_exit,
                         size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         if y_now > y1_exit:  # если выход снизу, то идем вниз
             while True:
                 step = y_now - size_cell_y
@@ -263,9 +234,6 @@ class Generator:
     @staticmethod
     def generate_cameras_all_cell(x0_field, x1_field, y0_field,
                                   y1_field, size_cell_x, size_cell_y):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         x = []
         y = []
         koef = {0: [0.15, 0.5], 1: [0.5, 0.85], 2: [0.85, 0.5], 3: [0.5, 0.15],
@@ -284,9 +252,6 @@ class Generator:
 
     @staticmethod
     def generate_times(start_time, end_time, inter_time_start, inter_time_end, start_date, end_date):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        print('caller name:', calframe[1][3])
         """Нужно использовать формат 11:00, (минуты), 2023-03-01. Генерируется какое-то число
         и генерируются точки времени."""
         year_start, month_start, day_start = start_date.split("-")
