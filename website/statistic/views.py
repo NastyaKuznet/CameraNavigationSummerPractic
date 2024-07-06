@@ -18,9 +18,10 @@ def get_statistic(request):
         form = MyForm(request.POST)
         if form.is_valid():
             n = form.cleaned_data['count_days']
-            context = get_stat_new_user(int(n))
+            context = {'chart': get_stat_new_user(int(n)), 'chart2':  get_stat_activity(int(n))}
+
     else:
-        context = get_stat_new_user(3)
+        context = {'chart': get_stat_new_user(int(3)), 'chart2':  get_stat_activity(int(3))}
     return render(request, 'statistic/statistic.html', context)
 
 
@@ -42,7 +43,24 @@ def get_stat_new_user(n):
                    tickmode='array',
                    tickvals=str_times),
     )
-    context = {'chart': fig.to_html()}
-    return context
+    return fig.to_html()
 
 
+def get_stat_activity(n):
+    times = []
+    str_times = []
+    for i in range(n):
+        times.append(datetime.now() - timedelta(days=i))
+        str_times.append(str(times[i].date()))
+    stat = [15, 20, 10, 5, 6]
+
+    fig = go.Figure(data=[go.Bar(x=str_times, y=stat[len(stat) - n:])])
+    fig.update_layout(
+        title=f"Статистика по активности новых пользователей за последние дни",
+        xaxis_title="Дата",
+        yaxis_title="Количество активности пользователей",
+        xaxis=dict(tickformat='%Y-%m-%d', type='date',
+                   tickmode='array',
+                   tickvals=str_times),
+    )
+    return fig.to_html()

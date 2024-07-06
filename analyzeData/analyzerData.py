@@ -33,7 +33,8 @@ class AnalyzerData:
         return len(bad_x) == 0, good_x, good_y, bad_x, bad_y
 
     @staticmethod
-    def analyze_trajectories(x_mas, y_mas, good_x_mas, good_y_mas, bad_x_mas, bad_y_mas, states_gen, states_an):
+    def analyze_trajectories(x_mas, y_mas, good_x_mas, good_y_mas, bad_x_mas, bad_y_mas, states_gen, states_an,
+                             state_an, point_not_exit):
         count_com = 0
         count_all = 0
         for i in range(len(x_mas)):
@@ -59,9 +60,11 @@ class AnalyzerData:
                   f"Сколько вышло из здания (сгененрированно): {count_go_out}\n",
                   f"Сколько НЕ вышло из здания (сгененрированно): {len(states_gen) - count_go_out}\n",
                   f"Сколько вышло из здания (проанализировано): {count_go_out_an}\n",
-                  f"Сколько НЕ вышло из здания (проанализировано): {len(states_an) - count_go_out_an}\n",
-                  f"Процент совпадения: {proc_com}%\n",
-                  f"Не совпавшие координаты: \n"]
+                  f"Сколько НЕ вышло из здания (проанализировано): {len(states_an) - count_go_out_an}\n"]
+        if not state_an:
+            answer.append(f"Последний раз человек был замечен:{point_not_exit}")
+        answer.append(f"Процент совпадения: {proc_com}%\n")
+        answer.append(f"Не совпавшие координаты: \n")
         for i in range(len(points)):
             answer.append(f"{i+1}: {points[i]}\n")
         return answer
@@ -199,8 +202,15 @@ class AnalyzerData:
         y2 =[y[0]]
         times2 = []
 
+        directory = r"D:\practice\1"
+        file_paths = []
+        for root, _, files in os.walk(directory):
+            for file in files:
+                file_path = os.path.join(root, file)
+                file_paths.append(file_path)
+        bad_photo = []
+
         good_x = []; good_y = []; bad_x = []; bad_y = []
-        print(len(x), len(times))
         for i in range(len(x)):
             if i == 0:
                 continue
@@ -214,6 +224,7 @@ class AnalyzerData:
             else:
                 bad_x.append(x[i])
                 bad_y.append(y[i])
+                bad_photo.append(file_paths[i % len(file_paths)][len(directory):])
 
 
         state2 = x[-1] == x2[-1]
@@ -252,8 +263,8 @@ class AnalyzerData:
             height=height_w,
         )  # настройки формата
         answ = AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
-                                          [bad_x], [bad_y], [state], [state2])
-        return fig.to_html(), answ  # вывод
+                                          [bad_x], [bad_y], [state], [state2], state2, (x2[-1], y2[-1]))
+        return fig.to_html(), answ, bad_photo  # вывод
 
     @staticmethod
     def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):

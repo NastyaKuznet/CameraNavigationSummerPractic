@@ -39,6 +39,9 @@
     {% for i in answer %}
         <li style="font-size:20;">{{ i }} </li>
     {% endfor %}
+     {% for photo in bad_photo %}
+        <li style="font-size:20;">{{ photo }} </li>
+    {% endfor %}
 </ul>
 <form action="{% url 'logout' %}">
     <button type="submit">Выход</button>

@@ -39,8 +39,8 @@ def button_click(request):
             size_y = form.cleaned_data['sy']
             time_start: str = form.cleaned_data['ts']
             time_end: str = form.cleaned_data['te']
-            chart, answ = ad.AnalyzerData.start_demo3(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
-            context = {'chart': chart, 'answer': answ}
+            chart, answ, bad_photo = ad.AnalyzerData.start_demo3(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+            context = {'chart': chart, 'answer': answ, "bad_photo": bad_photo}
             return render(request, 'mainapp/index.html', context)
     else:
         return render(request, 'mainapp/index.html')
