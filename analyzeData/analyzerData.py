@@ -3,12 +3,12 @@ import random
 
 from plotly import graph_objs as go
 
-import analyzeData.generator as gr
-import analyzeData.graphsystem as gs
-import database.db as db
-import database.config as cf
-#import RecognizeFromFile as rf
-from DBHelper import DBHelper
+import CameraNavigationSummerPractic.analyzeData.generator as gr
+import CameraNavigationSummerPractic.analyzeData.graphsystem as gs
+import CameraNavigationSummerPractic.database.db as db
+import CameraNavigationSummerPractic.database.config as cf
+from CameraNavigationSummerPractic.trash.recognizer import ReIdRecognizer
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 class AnalyzerData:
@@ -269,6 +269,7 @@ class AnalyzerData:
     @staticmethod
     def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
+        directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces'
 
         good_x = []
         good_y = []
@@ -293,7 +294,7 @@ class AnalyzerData:
         bad_photo = []
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
 
-        '''generator = rf.RecognizeFromFile(db_helper)
+        generator = rf.RecognizeFromFile(db_helper)
         for i in range(len(x)):
             id_p = generator.recognize(file_paths[i % len(path)])
             if id_p in id_person:
@@ -328,4 +329,5 @@ class AnalyzerData:
 
 
 if __name__ == "__main__":
-    pass
+    reco = ReIdRecognizer()
+    reco.entrance_recognize('D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\1\1.jpg')

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Editor</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            background-color: #EFE4B0;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+        }
+        .editor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+        button {
+            margin-top: 10px;
+        }
+        .button-container {
+            margin-bottom: 10px;
+        }
+        .list-container {
+            margin-left: 20px;
+        }
+        .list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="editor">
+            <div class="button-container">
+                <button id="drawLineButton">Нарисовать линию</button>
+                <button id="addCameraButton">Добавить камеру</button>
+                <input type="text" id="cameraAddress" placeholder="Адрес камеры">
+                <button id="saveButton">Сохранить</button>
+            </div>
+            <canvas id="maze" width="500" height="500"></canvas>
+        </div>
+        <div class="list-container">
+            <h3>Список элементов</h3>
+            <div class="list" id="elementsList"></div>
+        </div>
+    </div>
+    <script src="maze-editor2.js"></script>
+</body>
+</html>
