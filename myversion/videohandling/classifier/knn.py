@@ -3,7 +3,7 @@ import numpy as np
 
 
 class VectorClassifier:
-    def __init__(self, n_neighbors=5):
+    def __init__(self, n_neighbors=1):
         self.model = KNeighborsClassifier(n_neighbors=n_neighbors)
         self.X = []  # Здесь будут храниться ваши векторы
         self.y = []  # Здесь будут храниться соответствующие id

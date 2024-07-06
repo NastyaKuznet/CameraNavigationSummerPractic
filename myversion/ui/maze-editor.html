@@ -1,38 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maze Editor</title>
+    <title>Графический редактор</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #EFE4B0;
-            height: 100vh;
-            margin: 0;
-        }
         canvas {
             border: 1px solid #000;
+            background-color: #efe4b0;
         }
-        button {
-            margin-top: 10px;
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            width: 200px;
         }
-        .button-container {
-            margin-bottom: 10px;
+        .camera-list {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="button-container">
-        <button id="drawLineButton">Нарисовать линию</button>
-        <button id="addCameraButton">Добавить камеру</button>
-        <input type="text" id="cameraAddress" placeholder="Адрес камеры">
-        <button id="saveButton">Сохранить</button>
+    <div style="display: flex;">
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <div class="sidebar">
+            <button onclick="saveData()">Сохранить</button>
+            <button onclick="toggleCameraMode()">Режим добавления камеры</button>
+            <div id="cameraControls" style="display: none;">
+                <label>Угол обзора: <input type="number" id="cameraAngle" min="1" max="180" value="60"></label>
+                <label>Длина обзора: <input type="number" id="cameraLength" min="10" max="300" value="100"></label>
+                <button onclick="updateCamera()">Обновить камеру</button>
+            </div>
+
+            <div class="camera-list" id="cameraList"></div>
+        </div>
     </div>
-    <canvas id="maze" width="500" height="500"></canvas>
-    <script src="maze-editor.js"></script>
+    <script src="editor.js"></script>
 </body>
 </html>
