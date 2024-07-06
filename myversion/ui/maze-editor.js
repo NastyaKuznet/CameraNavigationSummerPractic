@@ -1,6 +1,6 @@
 const canvas = document.getElementById('maze');
 const ctx = canvas.getContext('2d');
-const gridSize = 25;
+const gridSize = 50;
 const cellSize = canvas.width / gridSize;
 
 let lines = [];
@@ -131,3 +131,27 @@ document.getElementById('saveButton').addEventListener('click', () => {
         console.error('Error:', error);
     });
 });
+
+// Функция для загрузки данных с сервера и отрисовки их на канвасе
+function loadExistingData() {
+    fetch('https://example.com/load', {  // замените на ваш URL
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        lines = data.lines || [];
+        cameras = data.cameras || [];
+        redraw();
+    })
+    .catch(error => {
+        console.error('Error loading data:', error);
+    });
+}
+
+// Загрузка данных при загрузке страницы
+window.onload = loadExistingData;
+
+redraw();

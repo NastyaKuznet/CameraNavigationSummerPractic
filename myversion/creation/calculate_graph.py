@@ -1,8 +1,10 @@
 from collections import deque
+from CameraNavigationSummerPractic.myversion.general.DBHelper import DBHelper
 
 
 class Map:
     def __init__(self):
+        self.db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
         self.m = 100
         self.n = 100
         """ 
@@ -25,14 +27,19 @@ class Map:
         # Т.е. нельзя поставить линию рядом, если она не начинается из другой линии
         self.walls[self.walls_counter] = [x1, y1, x2, y2]
         self.walls_counter += 1
-        # Добавление в БД
+        self.db_helper.exec(f"""
+        insert into wall (id_location, coord_start, coord_end) values (1, point({x1}, {y1}), point({x2}, {y2})))
+        """)
 
-    def add_camera(self, camera, field1, field2, ip):
+    def add_camera(self, camera, field1, field2, ip, type_):
         center = ((camera[0] + field1[0] + field2[0]) / 3, (camera[1] + field1[1] + field2[1]) / 3)
         nearest = int(center[0]), int(center[1])
         self.cameras[self.cam_counter] = [camera, field1, field2, nearest]
         self.cam_counter += 1
-        # Добавление в БД
+        self.db_helper.exec(f"""
+        insert into camera (id_location, ip, type_, points) values 
+        (1, {ip}, {type_}, %s)
+        """, [camera, field1, field2, nearest])
 
     def graph(self):
         # Строим матрицу. Находим кратчайшие расстояния между всеми точками.
@@ -44,7 +51,10 @@ class Map:
                 # Потом возможен вывод ошибки, если путь найти не удалось
                 if path != 0:
                     graph.append(path)
-        # Добавление в БД
+        for i in graph:
+            self.db_helper.exec("""
+            insert into graph (id_location, points) values (1, %s)
+            """, i)
 
     @staticmethod
     # Строит матрицу из 0 и 1, чтобы понять где мы можем ходить
