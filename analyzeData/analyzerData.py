@@ -290,7 +290,7 @@ class AnalyzerData:
             for file in files:
                 file_path = os.path.join(root, file)
                 file_paths.append(file_path)
-
+        bad_photo = []
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
 
         '''generator = rf.RecognizeFromFile(db_helper)
@@ -305,7 +305,8 @@ class AnalyzerData:
             else:
                 bad_x.append(x[i])
                 bad_y.append(y[i])
-
+                bad_photo.append(file_paths[i % len(file_paths)][len(directory) + 1:])
+        state2 = x[-1] == x_a[-1] && y[-1] == y_a[-1]
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex])  # локация, выход, камеры
         gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
@@ -322,8 +323,8 @@ class AnalyzerData:
             height=height_w,
         )  # настройки формата
         answ = AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
-                                                 [bad_x], [bad_y], [state], [state2])
-        return fig.to_html(), answ  # вывод'''
+                                                 [bad_x], [bad_y], [state], [state2], state2, (x_a[-1], y_a[-1]))
+        return fig.to_html(), answ, bad_photo   # вывод'''
 
 
 if __name__ == "__main__":
