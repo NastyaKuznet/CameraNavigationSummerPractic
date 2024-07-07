@@ -275,9 +275,9 @@ class AnalyzerData:
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
         x2, y2, state2, times2, ex2 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
         x3, y3, state3, times3, ex3 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
-        directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\\'
-        directory2 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\\'
-        directory3 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\\'
+        directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\babka\\'
+        directory2 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\Muzhik\\'
+        directory3 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\RedLady\\'
 
         good_x = []
         good_y = []
