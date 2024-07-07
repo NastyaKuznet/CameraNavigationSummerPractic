@@ -6,6 +6,9 @@ from ultralytics import YOLO
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 from CameraNavigationSummerPractic.analyzeData.loading_analyzing import TimeValueLogger
+from sklearn.decomposition import PCA
+import plotly.graph_objs as go
+import pandas as pd
 
 
 class VectorClassifier:
@@ -38,6 +41,40 @@ class VectorClassifier:
             self.X.pop(idx)
             idx = self.y.index(id_)
         self._retrain_model()
+
+    def plot_vectors(self):
+        # Применение PCA для снижения размерности до 2D для визуализации
+        pca = PCA(n_components=2)
+        X_pca = pca.fit_transform(self.X)
+
+        # Создание DataFrame для визуализации
+        df = pd.DataFrame(X_pca, columns=['Component 1', 'Component 2'])
+        df['Vector ID'] = self.y
+
+        # Визуализация
+        fig = go.Figure()
+
+        # Добавление точек
+        for vector_id in df['Vector ID'].unique():
+            cluster_data = df[df['Vector ID'] == vector_id]
+            fig.add_trace(go.Scatter(
+                x=cluster_data['Component 1'],
+                y=cluster_data['Component 2'],
+                mode='markers',
+                marker=dict(size=10),
+                name=f'ID: {vector_id}'
+            ))
+
+        # Настройка макета графика
+        fig.update_layout(
+            title='Vectors Visualization',
+            xaxis_title='Component 1',
+            yaxis_title='Component 2',
+            legend_title='Vector ID'
+        )
+
+        # Отображение графика
+        fig.show()
 
 
 class Model:

@@ -318,6 +318,8 @@ class AnalyzerData:
                 bad_x.append(x[i])
                 bad_y.append(y[i])
                 bad_photo.append(file_paths[i % len(file_paths)][len(directory) + 1:])
+
+        reco.knn.plot_vectors()
         state2 = x[-1] == x_a[-1] and y[-1] == y_a[-1]
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex])  # локация, выход, камеры
