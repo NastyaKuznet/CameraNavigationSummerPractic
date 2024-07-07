@@ -391,9 +391,9 @@ class AnalyzerData:
                 bad_y3.append(y3[i])
                 bad_photo.append(file_paths3[i % len(file_paths3)][len(directory3) + 1:])
         reco.knn.plot_vectors()
-        state_a = x[-1] == x_a[-1] and y[-1] == y_a[-1]
-        state_a2 = x2[-1] == x_a2[-1] and y2[-1] == y_a2[-1]
-        state_a3 = x3[-1] == x_a3[-1] and y3[-1] == y_a3[-1]
+        state_a = len(x_a) != 0 and x[-1] == x_a[-1] and y[-1] == y_a[-1]
+        state_a2 = len(x_a2) != 0 and x2[-1] == x_a2[-1] and y2[-1] == y_a2[-1]
+        state_a3 = len(x_a3) != 0 and x3[-1] == x_a3[-1] and y3[-1] == y_a3[-1]
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex])  # локация, выход, камеры
         gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
