@@ -155,6 +155,8 @@ class GraphSystem:
                                      mode="lines",
                                      line=dict(width=2, color=colors_lines[i % len(colors_lines)])))
         for i in range(len(x_mas)):
+            if not x_mas[i]:
+                continue
             fig.add_trace(go.Scatter(x=x_mas[i], y=y_mas[i],
                                      mode="lines",
                                      text=times[i],
@@ -176,6 +178,8 @@ class GraphSystem:
         for k in range(max_len):
             frame_data = []
             for i in range(len(x_mas)):
+                if not x_mas[i]:
+                    continue
                 x_now = x_mas[i][-1] if k >= len(x_mas[i]) else x_mas[i][k]
                 y_now = y_mas[i][-1] if k >= len(x_mas[i]) else y_mas[i][k]
                 frame_data.append(go.Scatter(
@@ -213,7 +217,6 @@ class GraphSystem:
         for i in range(len(cameras[0])):
             fig.add_shape(type="rect", x0=cameras[0][i], y0=cameras[1][i], x1=cameras[0][i] + size,
                           y1=cameras[1][i] + size, line=dict(color="blue", width=4))
-
 
 if __name__ == "__main__":
     # draw_test_location(0, 0, 10, 10, 1, 1, 600, 600)
