@@ -5,6 +5,7 @@ from torchvision import transforms
 from ultralytics import YOLO
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
+from CameraNavigationSummerPractic.trash.loading_analyzing import TimeValueLogger
 
 
 class VectorClassifier:
@@ -68,6 +69,8 @@ class ReIdRecognizer:
         self.yolo = YOLO("../yolofacenet/yolov8n.pt")
         self.model = Model()
         self.knn = VectorClassifier()
+        self.persons = []
+        self.logger = TimeValueLogger()
 
     # Распознаем каждого по одному разу на входе
     def entrance_recognize(self, path, name):
@@ -76,6 +79,9 @@ class ReIdRecognizer:
         img_color = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
         results = self.yolo.track(img_color, persist=True, show=False)
+        # {"preprocess": None, "inference": None, "postprocess": None}
+        self.logger.log(results[0].speed)
+
         if results[0].boxes:
             classes = results[0].boxes.cls.cpu().numpy()
             boxes = results[0].boxes.xywh
@@ -95,6 +101,8 @@ class ReIdRecognizer:
         img_color = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
         results = self.yolo.track(img_color, persist=True, show=False)
+        self.logger.log(results[0].speed)
+        persons = []
         if results[0].boxes:
             classes = results[0].boxes.cls.cpu().numpy()
             boxes = results[0].boxes.xywh
@@ -106,8 +114,9 @@ class ReIdRecognizer:
                                                      int(x - w // 2):int(x + w // 2)])
                 vector = self.model.get_vector(preprocessed)
                 class_id = self.knn.classify_vector(vector)
+                persons.append(class_id)
                 self.knn.add_vector(vector, class_id)
-                return class_id
+        return persons
 
 
 if __name__ == '__main__':

@@ -5,8 +5,8 @@ from plotly import graph_objs as go
 
 import CameraNavigationSummerPractic.analyzeData.generator as gr
 import CameraNavigationSummerPractic.analyzeData.graphsystem as gs
-import CameraNavigationSummerPractic.database.db as db
-import CameraNavigationSummerPractic.database.config as cf
+#import CameraNavigationSummerPractic.database.db as db
+#import CameraNavigationSummerPractic.database.config as cf
 from CameraNavigationSummerPractic.trash.recognizer import ReIdRecognizer
 from CameraNavigationSummerPractic.DBHelper import DBHelper
 
@@ -269,7 +269,7 @@ class AnalyzerData:
     @staticmethod
     def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
-        directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces'
+        directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\'
 
         good_x = []
         good_y = []
@@ -287,17 +287,28 @@ class AnalyzerData:
         id_person = 1
         path_directory = r""
         file_paths = []
-        for root, _, files in os.walk(path_directory):
+        file_names = []
+        for root, _, files in os.walk(directory):
             for file in files:
+                # D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\Screenshot_368.jpg
                 file_path = os.path.join(root, file)
                 file_paths.append(file_path)
+                name = file_path.split('\\')[-3]
+                file_names.append(name)
+
+        reco = ReIdRecognizer()
+        # Надо рандомно добавлять людей в процессе
+        reco.entrance_recognize(file_paths[0], file_names[0])
+        reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\1\7.jpg', 'Nasoj')
+        reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\6\4.jpg',
+                                'Yaposhka')
+
         bad_photo = []
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
 
-        generator = rf.RecognizeFromFile(db_helper)
         for i in range(len(x)):
-            id_p = generator.recognize(file_paths[i % len(path)])
-            if id_p in id_person:
+            id_p = reco.recognize(file_paths[i % len(file_paths)])
+            if file_names[i % len(file_paths)] in id_p:
                 x_a.append(x[i])
                 y_a.append(y[i])
                 times_a.append(times[i])
@@ -307,7 +318,7 @@ class AnalyzerData:
                 bad_x.append(x[i])
                 bad_y.append(y[i])
                 bad_photo.append(file_paths[i % len(file_paths)][len(directory) + 1:])
-        state2 = x[-1] == x_a[-1] && y[-1] == y_a[-1]
+        state2 = x[-1] == x_a[-1] and y[-1] == y_a[-1]
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex])  # локация, выход, камеры
         gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
@@ -329,5 +340,6 @@ class AnalyzerData:
 
 
 if __name__ == "__main__":
-    reco = ReIdRecognizer()
-    reco.entrance_recognize('D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\1\1.jpg')
+    AnalyzerData.start_demo4(0, 0, 20, 20, 1, 1, '8:00', '12:00', 20, 20)
+
+

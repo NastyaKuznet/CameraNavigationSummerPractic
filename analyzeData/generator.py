@@ -58,11 +58,11 @@ class Generator:
                     y_now = step
             Generator.append_x_y(x, y, x_now, y_now)
             count += 1
-            if x1_exit == x_now and y1_exit == y_now:
-                out = random.randint(0, 1)  # пойти на выход или нет?
-                if out == 0:
-                    state = True
-                    break
+            # if x1_exit == x_now and y1_exit == y_now:
+            #     out = random.randint(0, 1)  # пойти на выход или нет?
+            #     if out == 0:
+            #         state = True
+            #         break
 
             if count == count_max - early:
                 state = Generator.get_out(x, y, x_now, y_now, count, count_max, x_exit, y_exit, x1_exit, y1_exit,
