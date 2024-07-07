@@ -61,7 +61,7 @@ class GraphBuilder:
             legend_title='Stages'
         )
 
-        fig.show()  # return fig.to_html(full_html=False)
+        return fig.to_html(full_html=False)
 
     def plot_request_rate(self):
         logs = self.read_logs()
@@ -87,7 +87,7 @@ class GraphBuilder:
             legend_title='Requests'
         )
 
-        fig.show()  # return fig.to_html(full_html=False)
+        return fig.to_html(full_html=False)
 
 
 if __name__ == '__main__':
