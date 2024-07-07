@@ -34,7 +34,7 @@ class AnalyzerData:
 
     @staticmethod
     def analyze_trajectories(x_mas, y_mas, good_x_mas, good_y_mas, bad_x_mas, bad_y_mas, states_gen, states_an,
-                             state_an, point_not_exit):
+                             state_an, point_not_exit1, point_not_exit2, point_not_exit3):
         count_com = 0
         count_all = 0
         for i in range(len(x_mas)):
@@ -61,8 +61,12 @@ class AnalyzerData:
                   f"Сколько НЕ вышло из здания (сгененрированно): {len(states_gen) - count_go_out}\n",
                   f"Сколько вышло из здания (проанализировано): {count_go_out_an}\n",
                   f"Сколько НЕ вышло из здания (проанализировано): {len(states_an) - count_go_out_an}\n"]
-        if not state_an:
-            answer.append(f"Последний раз человек был замечен:{point_not_exit}")
+        if not states_an[0]:
+            answer.append(f"Последний раз человек 1 был замечен:{point_not_exit1}")
+        if not states_an[1]:
+            answer.append(f"Последний раз человек 2 был замечен:{point_not_exit2}")
+        if not states_an[2]:
+            answer.append(f"Последний раз человек 3 был замечен:{point_not_exit3}")
         answer.append(f"Процент совпадения: {proc_com}%\n")
         answer.append(f"Не совпавшие координаты: \n")
         for i in range(len(points)):
@@ -269,12 +273,24 @@ class AnalyzerData:
     @staticmethod
     def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
+        x2, y2, state2, times2, ex2 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
+        x3, y3, state3, times3, ex3 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
         directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\\'
+        directory2 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\\'
+        directory3 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\\'
 
         good_x = []
         good_y = []
         bad_x = []
         bad_y = []
+        good_x2 = []
+        good_y2 = []
+        bad_x2 = []
+        bad_y2 = []
+        good_x3 = []
+        good_y3 = []
+        bad_x3 = []
+        bad_y3 = []
 
         field = [[x0_f, y0_f], [x1_f, y1_f]]
         # генерация камер
@@ -283,9 +299,13 @@ class AnalyzerData:
         x_a = []
         y_a = []
         times_a = []
+        x_a2 = []
+        y_a2 = []
+        times_a2 = []
+        x_a3 = []
+        y_a3 = []
+        times_a3 = []
 
-        id_person = 1
-        path_directory = r""
         file_paths = []
         file_names = []
         for root, _, files in os.walk(directory):
@@ -296,6 +316,26 @@ class AnalyzerData:
                 name = file_path.split('\\')[-2]
                 print(file_path)
                 file_names.append(name)
+        file_paths2 = []
+        file_names2 = []
+        for root, _, files in os.walk(directory2):
+            for file in files:
+                # D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\Screenshot_368.jpg
+                file_path2 = os.path.join(root, file)
+                file_paths2.append(file_path2)
+                name = file_path2.split('\\')[-2]
+                print(file_path2)
+                file_names2.append(name)
+        file_paths3 = []
+        file_names3 = []
+        for root, _, files in os.walk(directory3):
+            for file in files:
+                # D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\Screenshot_368.jpg
+                file_path3 = os.path.join(root, file)
+                file_paths3.append(file_path3)
+                name = file_path3.split('\\')[-2]
+                print(file_path3)
+                file_names3.append(name)
         print(file_names)
         reco = ReIdRecognizer()
         # Надо рандомно добавлять людей в процессе
@@ -323,15 +363,46 @@ class AnalyzerData:
                 bad_y.append(y[i])
                 bad_photo.append(file_paths[i % len(file_paths)][len(directory) + 1:])
 
+        for i in range(len(x2)):
+            id_p = reco.recognize(file_paths2[i % len(file_paths2)])
+            print(file_names2[i % len(file_paths2)], id_p)
+            if file_names2[i % len(file_paths2)] in id_p:
+                x_a2.append(x2[i])
+                y_a2.append(y2[i])
+                times_a2.append(times2[i])
+                good_x2.append(x2[i])
+                good_y2.append(y2[i])
+            else:
+                bad_x2.append(x2[i])
+                bad_y2.append(y2[i])
+                bad_photo.append(file_paths2[i % len(file_paths2)][len(directory2) + 1:])
+
+        for i in range(len(x3)):
+            id_p = reco.recognize(file_paths3[i % len(file_paths3)])
+            print(file_names3[i % len(file_paths3)], id_p)
+            if file_names3[i % len(file_paths3)] in id_p:
+                x_a3.append(x3[i])
+                y_a3.append(y3[i])
+                times_a3.append(times3[i])
+                good_x3.append(x3[i])
+                good_y3.append(y3[i])
+            else:
+                bad_x3.append(x3[i])
+                bad_y3.append(y3[i])
+                bad_photo.append(file_paths3[i % len(file_paths3)][len(directory3) + 1:])
         reco.knn.plot_vectors()
-        state2 = x[-1] == x_a[-1] and y[-1] == y_a[-1]
+        state_a = x[-1] == x_a[-1] and y[-1] == y_a[-1]
+        state_a2 = x2[-1] == x_a2[-1] and y2[-1] == y_a2[-1]
+        state_a3 = x3[-1] == x_a3[-1] and y3[-1] == y_a3[-1]
         fig = go.Figure()
         gs.GraphSystem.draw_location(fig, field, exits=[ex])  # локация, выход, камеры
         gs.GraphSystem.draw_cameras_rect(fig, cam, 0.01)
         gs.GraphSystem.draw_chessboard(fig, x0_f, x1_f, y0_f, y1_f, s_x, s_y)  # разметка в виде шахматной доски
-        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a], [y, y_a], [times, times_a],
-                                                        ["Сгенерированная траектория", "Проанализированная траектория"],
-                                                        ["Сгенерированное движение", "Проанализированное движение"])  # траектории
+        gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a, x2, x_a2, x3, x_a3], [y, y_a, y2, y_a2, y3, y_a3], [times, times_a, times2, times_a2, times3, times_a3],
+                                                        ["Сгенерированная траектория 1", "Проанализированная траектория 1", "Сгенерированная траектория 2", "Проанализированная траектория 2", "Сгенерированная траектория 3", "Проанализированная траектория3"],
+                                                        ["Сгенерированное движение 1", "Проанализированное движение 1", "Сгенерированное движение 2", "Проанализированное движение 2", "Сгенерированное движение 3", "Проанализированное движение 3"],
+                                                        ['#0a3cc3', '#c31a0a', '#0a91c3', '#c3640a', '#550ac3', '#e7714a'],
+                                                        ['#0a246b', '#6c0e05', '#094961', '#5c3007', '#29075c', '#c74b22'])  # траектории
         fig.update_layout(
             xaxis_range=[x0_f, x1_f],
             yaxis_range=[y0_f, y1_f],
@@ -340,8 +411,9 @@ class AnalyzerData:
             width=width_w,
             height=height_w,
         )  # настройки формата
-        answ = AnalyzerData.analyze_trajectories([x], [y], [good_x], [good_y],
-                                                 [bad_x], [bad_y], [state], [state2], state2, (x_a[-1], y_a[-1]))
+        answ = AnalyzerData.analyze_trajectories([x, x2, x3], [y, y2, y3], [good_x, good_x2, good_x3], [good_y, good_y2, good_y3],
+                                                 [bad_x, bad_x2, bad_x3], [bad_y, bad_y2, bad_y3], [state, state2, state3], [state_a, state_a2, state_a3], state2, (x_a[-1], y_a[-1]),
+                                                 (x_a2[-1], y_a2[-1]), (x_a3[-1], y_a3[-1]))
         return fig.to_html(), answ, bad_photo   # вывод'''
 
 
