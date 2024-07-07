@@ -83,7 +83,7 @@ class VectorClassifier:
 class Model:
     def __init__(self):
         self.extractor = FeatureExtractor(
-            model_name='osnet_x0_25',
+            model_name='osnet_x1_0',
             device='cpu'  # Используйте 'cpu', если нет доступного GPU
         )
         self.preprocess = transforms.Compose([
@@ -149,6 +149,6 @@ if __name__ == '__main__':
         r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\RedLady.jpg',
         'RedLady')
 
-    res = reco.recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\RedLady\3.flv1314.jpg')
+    res = reco.recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\Muzhik\p2 12-09-41 12-10-11.flv228.jpg')
     print(res)
 

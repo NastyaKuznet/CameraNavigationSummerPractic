@@ -313,7 +313,7 @@ class AnalyzerData:
                 # D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\Screenshot_368.jpg
                 file_path = os.path.join(root, file)
                 file_paths.append(file_path)
-                name = file_path.split('\\')[-2]
+                name = file_path.split('\\')[-3]
                 print(file_path)
                 file_names.append(name)
         file_paths2 = []
@@ -323,7 +323,7 @@ class AnalyzerData:
                 # D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\Screenshot_368.jpg
                 file_path2 = os.path.join(root, file)
                 file_paths2.append(file_path2)
-                name = file_path2.split('\\')[-2]
+                name = file_path2.split('\\')[-3]
                 print(file_path2)
                 file_names2.append(name)
         file_paths3 = []
@@ -333,7 +333,7 @@ class AnalyzerData:
                 # D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\Screenshot_368.jpg
                 file_path3 = os.path.join(root, file)
                 file_paths3.append(file_path3)
-                name = file_path3.split('\\')[-2]
+                name = file_path3.split('\\')[-3]
                 print(file_path3)
                 file_names3.append(name)
         print(file_names)
@@ -362,6 +362,9 @@ class AnalyzerData:
                 bad_x.append(x[i])
                 bad_y.append(y[i])
                 bad_photo.append(file_paths[i % len(file_paths)][len(directory) + 1:])
+                times_a.append('30')
+                good_x.append('30')
+                good_y.append('30')
 
         for i in range(len(x2)):
             id_p = reco.recognize(file_paths2[i % len(file_paths2)])
@@ -376,7 +379,11 @@ class AnalyzerData:
                 bad_x2.append(x2[i])
                 bad_y2.append(y2[i])
                 bad_photo.append(file_paths2[i % len(file_paths2)][len(directory2) + 1:])
+                times_a2.append('30')
+                good_x2.append('30')
+                good_y2.append('30')
 
+        bias = 0
         for i in range(len(x3)):
             id_p = reco.recognize(file_paths3[i % len(file_paths3)])
             print(file_names3[i % len(file_paths3)], id_p)
@@ -386,10 +393,16 @@ class AnalyzerData:
                 times_a3.append(times3[i])
                 good_x3.append(x3[i])
                 good_y3.append(y3[i])
+                continue
             else:
                 bad_x3.append(x3[i])
                 bad_y3.append(y3[i])
                 bad_photo.append(file_paths3[i % len(file_paths3)][len(directory3) + 1:])
+                x_a3.append(30)
+                y_a3.append(30)
+                times_a3.append('30')
+                good_x3.append('30')
+                good_y3.append('30')
         reco.knn.plot_vectors()
         state_a = len(x_a) != 0 and x[-1] == x_a[-1] and y[-1] == y_a[-1]
         state_a2 = len(x_a2) != 0 and x2[-1] == x_a2[-1] and y2[-1] == y_a2[-1]

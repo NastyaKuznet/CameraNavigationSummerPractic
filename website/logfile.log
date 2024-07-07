@@ -2647,3 +2647,151 @@ Traceback (most recent call last):
   File "D:\anaconda\lib\site-packages\ultralytics\utils\patches.py", line 26, in imread
     return cv2.imdecode(np.fromfile(filename, np.uint8), flags)
 FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Python\\CameraNavigation\\CameraNavigationSummerPractic\\resources\\photos\\entrance\\Muzhik.jpg'
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 394, in start_demo4
+    state_a = x[-1] == x_a[-1] and y[-1] == y_a[-1]
+IndexError: list index out of range
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 394, in start_demo4
+    state_a = x[-1] == x_a[-1] and y[-1] == y_a[-1]
+IndexError: list index out of range
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\trash\recognizer.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\trash\recognizer.py changed, reloading.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 401, in start_demo4
+    gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a, x2, x_a2, x3, x_a3], [y, y_a, y2, y_a2, y3, y_a3], [times, times_a, times2, times_a2, times3, times_a3],
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py", line 164, in draw_a_lot_trajectory_with_point
+    points_traces.append(go.Scatter(x=[x_mas[i][0]], y=[y_mas[i][0]], mode="markers",
+IndexError: list index out of range
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 401, in start_demo4
+    gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a, x2, x_a2, x3, x_a3], [y, y_a, y2, y_a2, y3, y_a3], [times, times_a, times2, times_a2, times3, times_a3],
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py", line 164, in draw_a_lot_trajectory_with_point
+    points_traces.append(go.Scatter(x=[x_mas[i][0]], y=[y_mas[i][0]], mode="markers",
+IndexError: list index out of range
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py changed, reloading.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 401, in start_demo4
+    gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a, x2, x_a2, x3, x_a3], [y, y_a, y2, y_a2, y3, y_a3], [times, times_a, times2, times_a2, times3, times_a3],
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py", line 181, in draw_a_lot_trajectory_with_point
+    x_now = x_mas[i][-1] if k >= len(x_mas[i]) else x_mas[i][k]
+IndexError: list index out of range
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 401, in start_demo4
+    gs.GraphSystem.draw_a_lot_trajectory_with_point(fig, [x, x_a, x2, x_a2, x3, x_a3], [y, y_a, y2, y_a2, y3, y_a3], [times, times_a, times2, times_a2, times3, times_a3],
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py", line 181, in draw_a_lot_trajectory_with_point
+    x_now = x_mas[i][-1] if k >= len(x_mas[i]) else x_mas[i][k]
+IndexError: list index out of range
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\graphsystem.py changed, reloading.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 415, in start_demo4
+    [bad_x, bad_x2, bad_x3], [bad_y, bad_y2, bad_y3], [state, state2, state3], [state_a, state_a2, state_a3], state2, (x_a[-1], y_a[-1]),
+IndexError: list index out of range
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 415, in start_demo4
+    [bad_x, bad_x2, bad_x3], [bad_y, bad_y2, bad_y3], [state, state2, state3], [state_a, state_a2, state_a3], state2, (x_a[-1], y_a[-1]),
+IndexError: list index out of range
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 428, in start_demo4
+    [bad_x, bad_x2, bad_x3], [bad_y, bad_y2, bad_y3], [state, state2, state3], [state_a, state_a2, state_a3], state2, (x_a[-1], y_a[-1]),
+IndexError: list index out of range
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 428, in start_demo4
+    [bad_x, bad_x2, bad_x3], [bad_y, bad_y2, bad_y3], [state, state2, state3], [state_a, state_a2, state_a3], state2, (x_a[-1], y_a[-1]),
+IndexError: list index out of range
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
