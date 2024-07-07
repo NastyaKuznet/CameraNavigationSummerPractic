@@ -6,7 +6,6 @@ class VidToImgs:
     @staticmethod
     def extract_frames(video_path, output_folder, counter):
         frame_skip = 2  # Количество кадров для пропуска
-        frame_count = 0
 
         video = cv2.VideoCapture(video_path)
 
@@ -21,7 +20,7 @@ class VidToImgs:
         frame_count = 0
         while True:
             frame_count += 1
-            if frame_count % frame_skip != 0:
+            if frame_count % frame_skip == 0:
                 continue
 
             success, frame = video.read()
@@ -41,7 +40,7 @@ class VidToImgs:
 if __name__ == '__main__':
     vti = VidToImgs()
 
-    video_path = r"D:\загрузки\domofon\p2 12-09-41 12-10-11.flv"
+    video_path = r"D:\загрузки\domofon\p4 12-10-16 12-10-46.flv"
     output_folder = r"D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\cam2"
 
     vti.extract_frames(video_path, output_folder, 0)

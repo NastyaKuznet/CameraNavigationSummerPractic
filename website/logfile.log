@@ -2608,3 +2608,42 @@ D:\Python\CameraNavigation\CameraNavigationSummerPractic\trash\recognizer.py cha
 {"time": "2024-07-07T16:00:01.477355", "preprocess": 2.006053924560547, "inference": 125.34832954406738, "postprocess": 1.9991397857666016}
 D:\Python\CameraNavigation\CameraNavigationSummerPractic\trash\recognizer.py changed, reloading.
 D:\Python\CameraNavigation\CameraNavigationSummerPractic\trash\recognizer.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py changed, reloading.
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 343, in start_demo4
+    reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\Muzhik.jpg',
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\trash\recognizer.py", line 118, in entrance_recognize
+    img = cv2.imread(path)
+  File "D:\anaconda\lib\site-packages\ultralytics\utils\patches.py", line 26, in imread
+    return cv2.imdecode(np.fromfile(filename, np.uint8), flags)
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Python\\CameraNavigation\\CameraNavigationSummerPractic\\resources\\photos\\entrance\\Muzhik.jpg'
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\anaconda\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\anaconda\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\anaconda\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\website\mainapp\views.py", line 42, in button_click
+    chart, answ, bad_photo = ad.AnalyzerData.start_demo4(int(x0_f), int(y0_f), int(x1_f), int(y1_f), int(size_x), int(size_y), time_start, time_end, 800, 600)
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\analyzeData\analyzerData.py", line 343, in start_demo4
+    reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\Muzhik.jpg',
+  File "D:\Python\CameraNavigation\CameraNavigationSummerPractic\trash\recognizer.py", line 118, in entrance_recognize
+    img = cv2.imread(path)
+  File "D:\anaconda\lib\site-packages\ultralytics\utils\patches.py", line 26, in imread
+    return cv2.imdecode(np.fromfile(filename, np.uint8), flags)
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Python\\CameraNavigation\\CameraNavigationSummerPractic\\resources\\photos\\entrance\\Muzhik.jpg'
