@@ -76,8 +76,9 @@ class AnalyzerData:
 
     @staticmethod
     def get_generate_traj(x0, y0, x1, y1, size_x, size_y, start_time,
-                          end_time):
-        ex = gr.Generator.generate_exit(x0, x1, y0, y1, size_x, size_y)
+                          end_time, ex=None):
+        if ex is None:
+            ex = gr.Generator.generate_exit(x0, x1, y0, y1, size_x, size_y)
         times = gr.Generator.generate_times(start_time, end_time, 1,
                                             5, "2024-07-08",
                                             "2024-07-08")
@@ -273,8 +274,8 @@ class AnalyzerData:
     @staticmethod
     def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
-        x2, y2, state2, times2, ex2 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
-        x3, y3, state3, times3, ex3 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
+        x2, y2, state2, times2, ex2 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, ex)
+        x3, y3, state3, times3, ex3 = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, ex)
         directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\babka\\'
         directory2 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\Muzhik\\'
         directory3 = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\RedLady\\'
