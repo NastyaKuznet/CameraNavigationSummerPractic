@@ -90,7 +90,8 @@ class GraphBuilder:
         fig.show()  # return fig.to_html(full_html=False)
 
 
-graph_builder = GraphBuilder()
+if __name__ == '__main__':
+    graph_builder = GraphBuilder()
 
-graph_builder.plot_graphs()
-graph_builder.plot_request_rate()
+    graph_builder.plot_graphs()
+    graph_builder.plot_request_rate()

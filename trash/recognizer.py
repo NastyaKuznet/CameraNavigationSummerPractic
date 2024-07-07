@@ -158,9 +158,9 @@ class ReIdRecognizer:
 
 if __name__ == '__main__':
     recognizer = ReIdRecognizer()
-    recognizer.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\myversion\resources\faces\seq_1\Screenshot_368.jpg', 'Jason')
+    recognizer.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\Screenshot_368.jpg', 'Jason')
     recognizer.entrance_recognize(
-        r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\myversion\resources\photos\1\8.jpg',
-        'Nosaj')
-    id_ = recognizer.recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\myversion\resources\faces\seq_1\Screenshot_369.jpg')
+        r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\2\a.jpg',
+        'a')
+    id_ = recognizer.recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\a2.jpg')
     print(id_)
