@@ -5,7 +5,7 @@ from torchvision import transforms
 from ultralytics import YOLO
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
-from CameraNavigationSummerPractic.trash.loading_analyzing import TimeValueLogger
+from CameraNavigationSummerPractic.analyzeData.loading_analyzing import TimeValueLogger
 
 
 class VectorClassifier:
