@@ -50,12 +50,12 @@ class GraphBuilder:
 
         fig = make_subplots(rows=1, cols=1)
 
-        fig.add_trace(go.Scatter(x=times, y=preprocess_values, mode='lines', name='Preprocess'))
-        fig.add_trace(go.Scatter(x=times, y=inference_values, mode='lines', name='Inference'))
-        fig.add_trace(go.Scatter(x=times, y=postprocess_values, mode='lines', name='Postprocess'))
+        fig.add_trace(go.Scatter(x=times, y=preprocess_values, mode='lines', name='Препроцесс'))
+        fig.add_trace(go.Scatter(x=times, y=inference_values, mode='lines', name='Интерфейс'))
+        fig.add_trace(go.Scatter(x=times, y=postprocess_values, mode='lines', name='Постпроцесс'))
 
         fig.update_layout(
-            title='Image processing',
+            title='Обработка изображений',
             xaxis_title='Time',
             yaxis_title='Values',
             legend_title='Stages'
@@ -78,13 +78,13 @@ class GraphBuilder:
         fig = make_subplots(rows=1, cols=1)
 
         fig.add_trace(go.Scatter(x=request_counts.index, y=request_counts.values, mode='lines+markers',
-                                 name='Requests per Minute'))
+                                 name='Количество запросов в минуту'))
 
         fig.update_layout(
-            title='Requests per Minute',
-            xaxis_title='Time',
-            yaxis_title='Number of Requests',
-            legend_title='Requests'
+            title='Количество запросов в минуту',
+            xaxis_title='Время',
+            yaxis_title='Номер запроса',
+            legend_title='Запросы'
         )
 
         return fig.to_html(full_html=False)
