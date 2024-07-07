@@ -1,7 +1,7 @@
 import numpy as np
 import faiss
 import pickle
-from DBHelper import DBHelper
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 class Vectors:

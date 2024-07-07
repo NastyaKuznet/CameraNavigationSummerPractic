@@ -5,7 +5,7 @@ from torchvision import transforms
 from ultralytics import YOLO
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
-from CameraNavigationSummerPractic.analyzeData.loading_analyzing import TimeValueLogger
+from analyzeData.loading_analyzing import TimeValueLogger
 from sklearn.decomposition import PCA
 import plotly.graph_objs as go
 import pandas as pd
@@ -18,6 +18,7 @@ class VectorClassifier:
         self.y = []  # Здесь будут храниться соответствующие id
 
     def add_vector(self, vector, vector_id):
+        print(vector_id)
         self.X.append(vector)
         self.y.append(vector_id)
         self._retrain_model()
@@ -26,6 +27,7 @@ class VectorClassifier:
         # Преобразование в numpy массивы для использования в sklearn
         X_train = np.array(self.X)
         y_train = np.array(self.y)
+        print(y_train)
         # Обучение модели
         self.model.fit(X_train, y_train)
 
@@ -43,6 +45,7 @@ class VectorClassifier:
         self._retrain_model()
 
     def plot_vectors(self):
+        print(self.y)
         # Применение PCA для снижения размерности до 2D для визуализации
         pca = PCA(n_components=2)
         X_pca = pca.fit_transform(self.X)
@@ -111,56 +114,41 @@ class ReIdRecognizer:
 
     # Распознаем каждого по одному разу на входе
     def entrance_recognize(self, path, name):
+        print(path, name)
         img = cv2.imread(path)
         img = cv2.resize(img, (640, 480), interpolation=cv2.INTER_LINEAR)
         img_color = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        results = self.yolo.track(img_color, persist=True, show=False)
-        # {"preprocess": None, "inference": None, "postprocess": None}
-        self.logger.log(results[0].speed)
-
-        if results[0].boxes:
-            classes = results[0].boxes.cls.cpu().numpy()
-            boxes = results[0].boxes.xywh
-            for clas, box in zip(classes, boxes):
-                if int(clas) != 0:  # 0 is person
-                    continue
-                x, y, w, h = box
-                preprocessed = self.model.preprocess(img_color[int(y - h // 2):int(y + h // 2),
-                                                     int(x - w // 2):int(x + w // 2)])
-                vector = self.model.get_vector(preprocessed)
-                self.knn.add_vector(vector, name)
+        preprocessed = self.model.preprocess(img_color)
+        vector = self.model.get_vector(preprocessed)
+        self.knn.add_vector(vector, name)
 
     # используем после entrance_recognize на каждом
     def recognize(self, path):
+        print(path)
         img = cv2.imread(path)
         img = cv2.resize(img, (640, 480), interpolation=cv2.INTER_LINEAR)
         img_color = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-        results = self.yolo.track(img_color, persist=True, show=False)
-        self.logger.log(results[0].speed)
         persons = []
-        if results[0].boxes:
-            classes = results[0].boxes.cls.cpu().numpy()
-            boxes = results[0].boxes.xywh
-            for clas, box in zip(classes, boxes):
-                if int(clas) != 0:  # 0 is person
-                    continue
-                x, y, w, h = box
-                preprocessed = self.model.preprocess(img_color[int(y - h // 2):int(y + h // 2),
-                                                     int(x - w // 2):int(x + w // 2)])
-                vector = self.model.get_vector(preprocessed)
-                class_id = self.knn.classify_vector(vector)
-                persons.append(class_id)
-                self.knn.add_vector(vector, class_id)
+        preprocessed = self.model.preprocess(img_color)
+        vector = self.model.get_vector(preprocessed)
+        class_id = self.knn.classify_vector(vector)
+        persons.append(class_id)
+        self.knn.add_vector(vector, class_id)
         return persons
 
 
 if __name__ == '__main__':
-    recognizer = ReIdRecognizer()
-    recognizer.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\Screenshot_368.jpg', 'Jason')
-    recognizer.entrance_recognize(
-        r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\2\a.jpg',
-        'a')
-    id_ = recognizer.recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\a2.jpg')
-    print(id_)
+    reco = ReIdRecognizer()
+    reco.entrance_recognize(
+        r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\babka.jpg', 'babka')
+    reco.entrance_recognize(
+        r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\Muzhik.jpg',
+        'Muzhik')
+    reco.entrance_recognize(
+        r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\RedLady.jpg',
+        'RedLady')
+
+    res = reco.recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\RedLady\3.flv1314.jpg')
+    print(res)
+

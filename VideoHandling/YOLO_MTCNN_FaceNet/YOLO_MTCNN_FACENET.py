@@ -4,8 +4,8 @@ import cv2
 from ultralytics import YOLO
 from keras_facenet import FaceNet
 import numpy as np
-from VideoHandling.FAISS.server import Server
-from DBHelper import DBHelper
+from CameraNavigationSummerPractic.VideoHandling.FAISS.server import Server
+from CameraNavigationSummerPractic.DBHelper import DBHelper
 
 
 class Recognizer:
@@ -45,7 +45,7 @@ class Recognizer:
 
 
 class YOLORecognizer(Recognizer):
-    def __init__(self, db_helper, server, source=0):
+    def __init__(self, db_helper, server, source: str | int =0):
         super().__init__(db_helper, server)
         self.xmtcnn = self.embedder.mtcnn()
         self.model = YOLO("yolov8n.pt")
@@ -165,5 +165,5 @@ if __name__ == '__main__':
     db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
     server = Server(db_helper)
     # recognizer = YOLORecognizer(db_helper, server)
-    recognizer = YOLOWithouShow(db_helper, server, 1)
+    recognizer = YOLORecognizer(db_helper, server, r'D:\загрузки\domofon\3.flv')
     threading.Thread(target=recognizer.mainloop).start()

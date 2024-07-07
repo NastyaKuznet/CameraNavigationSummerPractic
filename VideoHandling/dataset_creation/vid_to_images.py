@@ -4,11 +4,11 @@ import os
 
 class VidToImgs:
     @staticmethod
-    def extract_frames(video, output_folder, counter):
+    def extract_frames(video_path, output_folder, counter):
         frame_skip = 2  # Количество кадров для пропуска
         frame_count = 0
 
-        video = cv2.VideoCapture(video)
+        video = cv2.VideoCapture(video_path)
 
         if not video.isOpened():
             print("Video opening error")
@@ -18,10 +18,10 @@ class VidToImgs:
             os.makedirs(output_folder)
 
         # Counter is number which concatenate to name (for copies). Becareful to won't overwrite already exists img
-        frame_count = counter
+        frame_count = 0
         while True:
             frame_count += 1
-            if frame_count % (frame_skip + 1) != 0:
+            if frame_count % frame_skip != 0:
                 continue
 
             success, frame = video.read()
@@ -31,17 +31,17 @@ class VidToImgs:
                 break
 
             # Save image
-            frame_path = os.path.join(output_folder, f"{os.path.basename(video)}{frame_count}.jpg")
+            frame_path = os.path.join(output_folder, f"{os.path.basename(video_path)}{frame_count}.jpg")
             cv2.imwrite(frame_path, frame)
 
-            frame_count += 1
+
         video.release()
 
 
 if __name__ == '__main__':
     vti = VidToImgs()
 
-    video_path = f""
-    output_folder = r"D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\cam1"
+    video_path = r"D:\загрузки\domofon\p2 12-09-41 12-10-11.flv"
+    output_folder = r"D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\cam2"
 
     vti.extract_frames(video_path, output_folder, 0)

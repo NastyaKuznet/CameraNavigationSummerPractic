@@ -3,12 +3,12 @@ import random
 
 from plotly import graph_objs as go
 
-import CameraNavigationSummerPractic.analyzeData.generator as gr
-import CameraNavigationSummerPractic.analyzeData.graphsystem as gs
+import analyzeData.generator as gr
+import analyzeData.graphsystem as gs
 #import CameraNavigationSummerPractic.database.db as db
 #import CameraNavigationSummerPractic.database.config as cf
-from CameraNavigationSummerPractic.trash.recognizer import ReIdRecognizer
-from CameraNavigationSummerPractic.DBHelper import DBHelper
+from trash.recognizer import ReIdRecognizer
+from DBHelper import DBHelper
 
 
 class AnalyzerData:
@@ -269,7 +269,7 @@ class AnalyzerData:
     @staticmethod
     def start_demo4(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end, width_w, height_w):
         x, y, state, times, ex = AnalyzerData.get_generate_traj(x0_f, y0_f, x1_f, y1_f, s_x, s_y, time_start, time_end)
-        directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\'
+        directory = r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\sequences\\'
 
         good_x = []
         good_y = []
@@ -293,21 +293,25 @@ class AnalyzerData:
                 # D:\Python\CameraNavigation\CameraNavigationSummerPractic\seq_1\\Screenshot_368.jpg
                 file_path = os.path.join(root, file)
                 file_paths.append(file_path)
-                name = file_path.split('\\')[-3]
+                name = file_path.split('\\')[-2]
+                print(file_path)
                 file_names.append(name)
-
+        print(file_names)
         reco = ReIdRecognizer()
         # Надо рандомно добавлять людей в процессе
-        reco.entrance_recognize(file_paths[0], file_names[0])
-        reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\1\7.jpg', 'Nasoj')
-        reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\faces\6\4.jpg',
-                                'Yaposhka')
+        reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\babka.jpg', 'babka')
+        reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\Muzhik.jpg',
+                                'Muzhik')
+        reco.entrance_recognize(r'D:\Python\CameraNavigation\CameraNavigationSummerPractic\resources\photos\entrance\RedLady.jpg',
+                                'RedLady')
+
 
         bad_photo = []
         db_helper = DBHelper(database='big_brother', user='postgres', password='1111', host='localhost')
 
         for i in range(len(x)):
             id_p = reco.recognize(file_paths[i % len(file_paths)])
+            print(file_names[i % len(file_paths)], id_p)
             if file_names[i % len(file_paths)] in id_p:
                 x_a.append(x[i])
                 y_a.append(y[i])
