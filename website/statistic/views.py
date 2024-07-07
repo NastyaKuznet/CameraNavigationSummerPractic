@@ -6,6 +6,10 @@ from django.contrib.auth.decorators import login_required
 from plotly import graph_objs as go
 from django import forms
 
+import sys
+sys.path.append('D:\Python\CameraNavigation\CameraNavigationSummerPractic')
+import analyzeData.loading_analyzing as la
+
 
 class MyForm(forms.Form):
     count_days = forms.CharField(max_length=255)
@@ -13,15 +17,17 @@ class MyForm(forms.Form):
 
 @login_required()
 def get_statistic(request):
-
+    load_a = la.GraphBuilder()
     if request.method == 'POST':
         form = MyForm(request.POST)
         if form.is_valid():
             n = form.cleaned_data['count_days']
-            context = {'chart': get_stat_new_user(int(n)), 'chart2':  get_stat_activity(int(n))}
 
+            context = {'chart': get_stat_new_user(int(n)), 'chart2':  get_stat_activity(int(n)),
+                       'chart3': load_a.plot_graphs(), 'chart4': load_a.plot_request_rate()}
     else:
-        context = {'chart': get_stat_new_user(int(3)), 'chart2':  get_stat_activity(int(3))}
+        context = {'chart': get_stat_new_user(int(3)), 'chart2':  get_stat_activity(int(3)),
+                   'chart3': load_a.plot_graphs(), 'chart4': load_a.plot_request_rate()}
     return render(request, 'statistic/statistic.html', context)
 
 
